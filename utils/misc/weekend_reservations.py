@@ -4,7 +4,7 @@ import datetime
 from config_data.config import WEEKENDS
 
 
-def get_list_weekends(start_day: int, end_day: int, date: datetime) -> list[int]:
+def get_list_weekends(start_day: int, end_day: int, date: datetime) -> tuple[int, ...]:
     """
     Функция get_list_weekend. Возвращает список выходных дат.
     """
@@ -14,8 +14,8 @@ def get_list_weekends(start_day: int, end_day: int, date: datetime) -> list[int]
 
     num_day = [day_dict.get(weekend) for weekend in WEEKENDS]
 
-    return [(date + datetime.timedelta(i)).day
+    return tuple((date + datetime.timedelta(i)).day
             for i in range(1, delta + 1)
-            if datetime.datetime.isoweekday(date + datetime.timedelta(i)) in num_day]
+            if datetime.datetime.isoweekday(date + datetime.timedelta(i)) in num_day)
 
 

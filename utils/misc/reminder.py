@@ -12,4 +12,4 @@ async def reminder(date: datetime) -> None:
     res = database.mailing_for_day(date)
 
     for user in res:
-        await bot.send_message(chat_id=user[0], text="Напоминаю. У вас на сегодня запись.")
+        await bot.send_message(chat_id=user[0], text="Напоминаю. У вас сегодня запись.")

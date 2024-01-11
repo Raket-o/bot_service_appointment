@@ -39,7 +39,7 @@ async def service_appointment_1(message: types.Message, state: FSMContext):
 
     if res:
         working_hours = [
-            [i, 0] for i in range(BEGINNING_WORKING_DAY, END_WORKING_DAY + 1)
+            [i, 0] for i in range(BEGINNING_WORKING_DAY, END_WORKING_DAY)
         ]
         for i in res:
             for j in working_hours:
@@ -50,7 +50,7 @@ async def service_appointment_1(message: types.Message, state: FSMContext):
                         j[1] = f"{j[0]}:00"
     else:
         working_hours = [
-            [i, f"{i}:00"] for i in range(BEGINNING_WORKING_DAY, END_WORKING_DAY + 1)
+            [i, f"{i}:00"] for i in range(BEGINNING_WORKING_DAY, END_WORKING_DAY)
         ]
 
     working_hours.append([0, "Выбрать другую дату"])
@@ -85,7 +85,7 @@ async def service_appointment_2(
             if (
                 BEGINNING_WORKING_DAY
                 <= int(input_text.split(":")[0])
-                <= END_WORKING_DAY
+                <= END_WORKING_DAY -1
             ):
 
                 for i in working_hours:
@@ -107,10 +107,10 @@ async def service_appointment_2(
                     )
 
                 else:
-                    await message.answer("Выберите свободное время из списка.")
+                    await message.answer("Это время уже занято. Выберите свободное время из списка.")
 
             else:
-                await message.answer("В это время мы не работаем.")
+                await message.answer("В это время мы не работаем. Выберите свободное время из списка.")
 
     except ValueError:
         await message.answer("Выберите свободное время из списка.")

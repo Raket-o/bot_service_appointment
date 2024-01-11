@@ -25,5 +25,4 @@ async def restarting_services() -> None:
             from utils.misc.reminder import reminder
             await reminder(current_date)
 
-
         await asyncio.sleep(60)

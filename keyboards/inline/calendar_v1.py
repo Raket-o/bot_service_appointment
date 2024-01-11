@@ -34,7 +34,7 @@ async def calendar_buttons(date: datetime, action: str) -> InlineKeyboardMarkup:
 
     if date.month == current_datetime.month:
         text_btn = (
-            ("🎉🎁🎄", "ignore"),
+            ("🍪🎅🎁", "ignore"),
             (NAMES_MONTH[date.month], "ignore"),
             ("-->", f"calendar_next_month={action}"),
         )
