@@ -1,0 +1,9 @@
+#docker-compose.yml
+version: "2"
+
+services:
+  app:
+    build: .
+    container_name: bot_class_events
+    volumes: ['./database:/app/database/', './logs/:/app/logs/']
+    command: ["python", "main.py"]
