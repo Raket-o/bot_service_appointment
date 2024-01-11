@@ -3,7 +3,6 @@ import asyncio
 import datetime
 
 from database import database
-from utils.misc.weekend_reservations import weekend_reservations
 
 
 async def restarting_services() -> None:
@@ -15,7 +14,6 @@ async def restarting_services() -> None:
     """
     database.deleting_records_older_7_days()
     database.deletes_old_users()
-    weekend_reservations()
 
     while True:
         current_date = datetime.datetime.now()
@@ -26,10 +24,6 @@ async def restarting_services() -> None:
 
             from utils.misc.reminder import reminder
             await reminder(current_date)
-            weekend_reservations()
+
 
         await asyncio.sleep(60)
-
-
-
-

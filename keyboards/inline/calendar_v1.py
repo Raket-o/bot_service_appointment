@@ -4,6 +4,8 @@ import datetime
 
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
+from utils.misc.weekend_reservations import get_list_weekends
+
 NAMES_DAYS = ("Пн", "Вт", "Ср", "Чт", "Пт", "Суб", "Вск")
 NAMES_MONTH = {
     1: "Январь",
@@ -26,11 +28,11 @@ async def calendar_buttons(date: datetime, action: str) -> InlineKeyboardMarkup:
     Функция создания клавиатуры календаря.
     :return: InlineKeyboardMarkup
     """
-    current_month = datetime.datetime.now()
+    current_datetime = datetime.datetime.now()
 
     ikeyboard = InlineKeyboardMarkup(row_width=7)
 
-    if date.month == current_month.month:
+    if date.month == current_datetime.month:
         text_btn = (
             ("🎉🎁🎄", "ignore"),
             (NAMES_MONTH[date.month], "ignore"),
@@ -55,15 +57,23 @@ async def calendar_buttons(date: datetime, action: str) -> InlineKeyboardMarkup:
 
     obj = calendar.Calendar()
 
+    day_in_month = [num_day for num_day in obj.itermonthdays(date.year, date.month) if num_day >= date.day]
+    list_weekends = get_list_weekends(start_day=day_in_month[0], end_day=day_in_month[-1], date=date)
+
     for _ in range(date.weekday()):
         ikeyboard.insert(InlineKeyboardButton(" ", callback_data="ignore"))
 
-    for i_day in obj.itermonthdays(date.year, date.month):
-        if i_day >= date.day:
-            callback_data = f"{action}_{date.replace(day=i_day)}"
-            ikeyboard.insert(
-                InlineKeyboardButton(str(i_day), callback_data=callback_data)
-            )
+    for day_num in obj.itermonthdays(date.year, date.month):
+        if day_num >= date.day:
+            if day_num in list_weekends and action == "calendar_day":
+                ikeyboard.insert(
+                    InlineKeyboardButton(str(day_num), callback_data="weekend")
+                )
+            else:
+                callback_data = f"{action}_{date.replace(day=day_num)}"
+                ikeyboard.insert(
+                    InlineKeyboardButton(str(day_num), callback_data=callback_data)
+                )
 
     add_count_btn = 7 - len(ikeyboard.values["inline_keyboard"][-1])
     for _ in range(add_count_btn):

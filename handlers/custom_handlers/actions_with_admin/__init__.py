@@ -8,4 +8,5 @@ from . import (
     un_block_user,
     view_clients,
     viewing_recordings_day,
+    weekend,
 )
