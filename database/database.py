@@ -23,11 +23,11 @@ def init_db() -> None:
             );               
             """
         )
+        cursor.execute("CREATE INDEX IF NOT EXISTS user_info_name_telephone ON user_info(full_name, telephone)")
 
         cursor.executescript(
             """
             CREATE TABLE IF NOT EXISTS record_dates (
-
             telegram_id INTEGER DEFAULT 0,
             date DATE,
             hour INTEGER DEFAULT 0,
@@ -35,7 +35,7 @@ def init_db() -> None:
             );
             """
         )
-        #             id INTEGER PRIMARY KEY AUTOINCREMENT,
+        cursor.execute("CREATE INDEX IF NOT EXISTS record_dates_date_hour ON record_dates(date, hour)")
         conn.commit()
 
 
