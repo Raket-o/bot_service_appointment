@@ -279,7 +279,7 @@ def del_user(telegram_id: int) -> None:
         cursor: sqlite3.Cursor = conn.cursor()
         cursor.executescript("PRAGMA foreign_keys = ON;")
         cursor.execute(
-            "DELETE FROM record_dates WHERE telegram_id = ?;",
+            "DELETE FROM user_info WHERE telegramm_id = ?;",
             (telegram_id,),
         )
 
