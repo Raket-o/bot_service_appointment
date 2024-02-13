@@ -1,27 +1,28 @@
 """Модуль поиска клиентов по имя и номеру телефона"""
 from aiogram import types
-from aiogram.dispatcher import FSMContext
+from aiogram.fsm.context import FSMContext
 
 from database import database
 from keyboards.inline.back_admin_menu import back_admin_menu_button
 from keyboards.inline.detail_client import details_client_buttons
-from loader import dp
+# from loader import dp
 from states.states import ServiceDateState
 
 
-@dp.callback_query_handler(
-    lambda callback_query: callback_query.data == "search_client"
-)
-async def search_client_1(message: types.Message):
+# @dp.callback_query_handler(
+#     lambda callback_query: callback_query.data == "search_client"
+# )
+async def search_client_1(message: types.Message, state: FSMContext):
     """
     Функция search_client_1. Коллбэк с датой search_client запускает данную функцию.
     Просит ввести имя, фамилию или номер телефона
     """
     await message.message.answer("Введите имя, фамилию или номер телефона")
-    await ServiceDateState.search_client.set()
+    await state.set_state(ServiceDateState.search_client)
+    # await ServiceDateState.search_client.set()
 
 
-@dp.message_handler(state=ServiceDateState.search_client)
+# @dp.message_handler(state=ServiceDateState.search_client)
 async def search_client_2(
     message: types.Message, state: FSMContext
 ):
@@ -57,4 +58,4 @@ async def search_client_2(
 
     kb = back_admin_menu_button()
     await message.answer("Вернуться в админ в меню?", reply_markup=kb)
-    await state.finish()
+    await state.clear()

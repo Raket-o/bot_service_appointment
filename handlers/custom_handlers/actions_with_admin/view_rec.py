@@ -1,16 +1,16 @@
 import datetime
 
 from aiogram import types
-from aiogram.dispatcher import FSMContext
+from aiogram.fsm.context import FSMContext
 
 from database import database
 from keyboards.reply.list_button import list_button
-from loader import dp
+# from loader import dp
 
 
-@dp.callback_query_handler(
-    lambda callback_query: callback_query.data.startswith("view_rec_client=")
-)
+# @dp.callback_query_handler(
+#     lambda callback_query: callback_query.data.startswith("view_rec_client=")
+# )
 async def view_rec(message: [types.CallbackQuery, types.Message], state: FSMContext):
     telegram_id = message.data.split("=")[1]
     res = database.view_client_records(telegram_id)
@@ -29,4 +29,4 @@ async def view_rec(message: [types.CallbackQuery, types.Message], state: FSMCont
     kb.insert("Удалить все записи")
     kb.insert("Вернуться назад")
     await message.message.answer("Что-то хотите удалить?", reply_markup=kb)
-    await state.finish()
+    await state.clear()

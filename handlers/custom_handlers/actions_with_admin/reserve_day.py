@@ -2,17 +2,17 @@
 import datetime
 
 from aiogram import types
-from aiogram.dispatcher import FSMContext
+from aiogram.fsm.context import FSMContext
 
 from config_data import config
 from database import database
 from keyboards.inline.back_admin_menu import back_admin_menu_button
 from keyboards.inline.calendar_v1 import calendar_buttons
 from keyboards.inline.confirm_yes_no import conf_yes_no_button
-from loader import bot, dp
+from loader import bot
 
 
-@dp.callback_query_handler(lambda callback_query: callback_query.data == "reserve_day")
+# @dp.callback_query_handler(lambda callback_query: callback_query.data == "reserve_day")
 async def reserve_day_1(message: [types.CallbackQuery, types.Message]):
     """
     Функция reserve_day_1. Коллбэк с датой reserve_day запускает данную функцию.
@@ -23,18 +23,24 @@ async def reserve_day_1(message: [types.CallbackQuery, types.Message]):
     telegram_id = message.from_user.id
 
     kb = await calendar_buttons(current_date, callback_data)
-    kb.insert(
-        types.InlineKeyboardButton(
-            "Мои записи", callback_data=f"view_recordings={telegram_id}"
-        )
-    )
-    kb.insert(types.InlineKeyboardButton("Админ меню", callback_data="admin_menu"))
+    # kb.insert(
+    #     types.InlineKeyboardButton(
+    #         "Мои записи", callback_data=f"view_recordings={telegram_id}"
+    #     )
+    # )
+    # kb.insert(types.InlineKeyboardButton("Админ меню", callback_data="admin_menu"))
+
+    kb.button(text="Мои записи", callback_data=f"view_recordings={telegram_id}")
+    kb.button(text="Админ меню", callback_data="admin_menu")
+
+    kb.adjust(3, 7)
+    kb = kb.as_markup()
     await message.message.answer("Выберите дату:", reply_markup=kb)
 
 
-@dp.callback_query_handler(
-    lambda callback_query: callback_query.data.startswith("reserve_day_2")
-)
+# @dp.callback_query_handler(
+#     lambda callback_query: callback_query.data.startswith("reserve_day_2")
+# )
 async def reserve_day_2(message: [types.CallbackQuery, types.Message]):
     """
     Функция reserve_day_2. Коллбэк с датой reserve_day_2 запускает данную функцию.
@@ -55,16 +61,16 @@ async def reserve_day_2(message: [types.CallbackQuery, types.Message]):
     )
 
 
-@dp.callback_query_handler(
-    lambda callback_query: callback_query.data.startswith("reserve_day=")
-)
+# @dp.callback_query_handler(
+#     lambda callback_query: callback_query.data.startswith("reserve_day=")
+# )
 async def reserve_day_3(message: [types.CallbackQuery, types.Message]):
     """
     Функция reserve_day_3. Коллбэк с датой reserve_day= запускает данную функцию.
     Резервирует день.
     """
     data = message.data.split("=")
-    telegram_id = int(message["from"]["id"])
+    telegram_id = message.from_user.id
     date = data[1].split()[0]
     date = datetime.datetime.strptime(date, "%Y-%m-%d")
 

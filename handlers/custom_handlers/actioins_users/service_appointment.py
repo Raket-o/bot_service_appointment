@@ -2,7 +2,7 @@
 import datetime
 
 from aiogram import types
-from aiogram.dispatcher import FSMContext
+from aiogram.fsm.context import FSMContext
 from aiogram.types import ReplyKeyboardRemove
 
 from config_data import config
@@ -10,7 +10,7 @@ from database import database
 from handlers.default_heandlers.start import start_command
 from keyboards.reply.list_button import list_button
 from keyboards.reply.phone_request import contact_button
-from loader import bot, dp
+from loader import bot
 from states.states import ServiceDateState
 
 from config_data.config import ADMINS_TELEGRAM_ID
@@ -20,9 +20,9 @@ BEGINNING_WORKING_DAY = config.BEGINNING_WORKING_DAY
 END_WORKING_DAY = config.END_WORKING_DAY
 
 
-@dp.callback_query_handler(
-    lambda callback_query: callback_query.data.startswith("calendar_day_")
-)
+# @dp.callback_query_handler(
+#     lambda callback_query: callback_query.data.startswith("calendar_day_")
+# )
 async def service_appointment_1(message: types.Message, state: FSMContext):
     """Функция service_appointment_1. Выводит свободное время на день."""
     selected_date = datetime.datetime.strptime(
@@ -57,17 +57,26 @@ async def service_appointment_1(message: types.Message, state: FSMContext):
     kb = list_button(working_hours)
     await message.message.answer("Выберите свободное время:", reply_markup=kb)
 
-    async with state.proxy() as data:
-        data["telegram_id"] = telegram_id
-        data["firts_name"] = message.from_user.first_name
-        data["last_name"] = message.from_user.last_name
-        data["selected_date"] = selected_date
-        data["working_hours"] = working_hours
+    # async with state.proxy() as data:
+    # await state.update_data(your_msg=m.text)
+    # async state.get_data() as data:
+    # async with state.update_data() as data:
 
-    await ServiceDateState.service_time.set()
+    await state.update_data(
+        {
+        "telegram_id": telegram_id,
+        "firts_name": message.from_user.first_name,
+        "last_name": message.from_user.last_name,
+        "selected_date": selected_date,
+        "working_hours": working_hours
+        }
+    )
+
+    await state.set_state(ServiceDateState.service_time)
+    # await ServiceDateState.service_time.set()
 
 
-@dp.message_handler(state=ServiceDateState.service_time)
+# @dp.message_handler(state=ServiceDateState.service_time)
 async def service_appointment_2(
     message: [types.CallbackQuery, types.Message], state: FSMContext
 ):
@@ -76,35 +85,47 @@ async def service_appointment_2(
     try:
         input_text = message.text
         if "Выбрать" in input_text:
-            await state.finish()
+            await state.clear()
             await start_command(message)
         else:
-            async with state.proxy() as data:
-                working_hours = data["working_hours"]
+            # async with state.proxy() as data:
+            #     working_hours = data["working_hours"]
+            context_data = await state.get_data()
+            print("context_data",context_data)
 
             if (
                 BEGINNING_WORKING_DAY
                 <= int(input_text.split(":")[0])
                 <= END_WORKING_DAY -1
             ):
-
-                for i in working_hours:
+                for i in context_data.get("working_hours"):
+                    # print(type(input_text), input_text, type(i[1]), i[1])
                     if i[1] == input_text:
+                        # print("if i[1] == input_text:")
+
                         flag = True
 
                 if flag:
-                    async with state.proxy() as data:
-                        selected_date = data["selected_date"]
-                        data["selected_date"] = selected_date.replace(
-                            hour=int(input_text.split(":")[0])
-                        )
+                    # async with state.proxy() as data:
+                    #     selected_date = data["selected_date"]
+                    #     data["selected_date"] = selected_date.replace(
+                    #         hour=int(input_text.split(":")[0])
+                    #     )
+                    print("if flag:")
+                    selected_date = context_data.get("selected_date")
+                    await state.update_data(
+                        {
+                            "selected_date": selected_date.replace(hour=int(input_text.split(":")[0]))
+                        }
+                    )
 
-                    await ServiceDateState.service_cancel.set()
+                    # await ServiceDateState.service_cancel.set()
                     kb = await contact_button()
                     await message.answer(
                         "Нажмите на кнопку ниже, чтобы отправить контакт",
                         reply_markup=kb,
                     )
+                    await state.set_state(ServiceDateState.service_cancel)
 
                 else:
                     await message.answer("Это время уже занято. Выберите свободное время из списка.")
@@ -116,21 +137,24 @@ async def service_appointment_2(
         await message.answer("Выберите свободное время из списка.")
 
 
-@dp.message_handler(content_types=types.ContentType.CONTACT, state="*")
+# @dp.message_handler(content_types=types.ContentType.CONTACT, state="*")
 async def service_appointment_3(message: types.Message, state: FSMContext):
     """Функция service_appointment_3. Проверяет свободна ли дата и время,
     после записывает клиента и уведомляет его и админов."""
     contact = message.contact
+    print("contact",contact.__dict__)
 
-    async with state.proxy() as data:
-        selected_date = data["selected_date"]
+    # async with state.proxy() as data:
+    #     selected_date = data["selected_date"]
+    context_data = await state.get_data()
+    selected_date = context_data.get("selected_date")
 
     res = database.check_date_time_appointment(selected_date)
     if not res:
         database.set_date_time_appointment(contact, selected_date)
 
         sending_text = f"""Новая запись!!!
-    Имя: {contact.full_name}
+    Имя: {contact.last_name} {contact.first_name} 
     На {selected_date.day}-{selected_date.month}-{selected_date.year} в {selected_date.hour}:00.
     Номер телефона: {contact.phone_number}
         """
@@ -146,7 +170,7 @@ async def service_appointment_3(message: types.Message, state: FSMContext):
             f"""Вы записаны на {selected_date.day}-{selected_date.month}-{selected_date.year} в {selected_date.hour}:00.
     Ваш номер {contact.phone_number} был получен.
     Вам перезвонят в течение получаса, для подтверждения записи.
-    Спасибо, {contact.full_name}.
+    Спасибо, {contact.last_name} {contact.first_name}.
             """,
             reply_markup=ReplyKeyboardRemove(),
         )
@@ -156,5 +180,5 @@ async def service_appointment_3(message: types.Message, state: FSMContext):
             reply_markup=ReplyKeyboardRemove(),
         )
 
-    await state.finish()
+    await state.clear()
     await start_command(message)

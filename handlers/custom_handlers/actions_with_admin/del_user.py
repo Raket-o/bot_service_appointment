@@ -3,12 +3,12 @@ from aiogram import types
 
 from database import database
 from keyboards.inline.admin_buttons import admin_buttons
-from loader import dp
+# from loader import dp
 
 
-@dp.callback_query_handler(
-    lambda callback_query: callback_query.data.startswith("del_user=")
-)
+# @dp.callback_query_handler(
+#     lambda callback_query: callback_query.data.startswith("del_user=")
+# )
 async def delete_user(message: [types.CallbackQuery, types.Message]):
     """
     Функция delete_user. Коллбэк с датой del_user= запускает данную функцию.

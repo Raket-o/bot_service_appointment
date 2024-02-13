@@ -2,12 +2,12 @@ from aiogram import types
 
 from database import database
 from keyboards.inline.admin_buttons import admin_buttons
-from loader import dp
+# from loader import dp
 
 
-@dp.callback_query_handler(
-    lambda callback_query: callback_query.data.startswith("blocked=")
-)
+# @dp.callback_query_handler(
+#     lambda callback_query: callback_query.data.startswith("blocked=")
+# )
 async def unblocked_user(message: [types.CallbackQuery, types.Message]):
     telegram_id = message.data.split("=")[1]
     action = message.data.split("=")[2]

@@ -1,12 +1,12 @@
 """Модуль админ меню."""
 from aiogram import types
-from aiogram.dispatcher import FSMContext
+from aiogram.fsm.context import FSMContext
 
 from keyboards.inline.admin_buttons import admin_buttons
-from loader import dp
+# from loader import dp
 
 
-@dp.callback_query_handler(lambda callback_query: callback_query.data == "admin_menu")
+# @dp.callback_query_handler(lambda callback_query: callback_query.data == "admin_menu")
 async def admin_menu(
     message: [types.CallbackQuery, types.Message], state: FSMContext
 ) -> None:
@@ -16,5 +16,7 @@ async def admin_menu(
     """
     kb = admin_buttons()
     await message.message.answer("Выберите действие:", reply_markup=kb)
-    await state.finish()
+    # await state.finish()
+    await state.clear()
+
     await message.message.delete()

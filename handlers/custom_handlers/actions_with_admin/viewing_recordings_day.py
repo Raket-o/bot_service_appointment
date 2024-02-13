@@ -5,32 +5,39 @@ from aiogram import types
 from database import database
 from keyboards.inline.back_admin_menu import back_admin_menu_button
 from keyboards.inline.calendar_v1 import calendar_buttons
-from loader import dp
+# from loader import dp
 
 
-@dp.callback_query_handler(
-    lambda callback_query: callback_query.data == "viewing_recordings_day"
-)
+# @dp.callback_query_handler(
+#     lambda callback_query: callback_query.data == "viewing_recordings_day"
+# )
 async def viewing_recordings_day_1(message: [types.CallbackQuery, types.Message]):
     current_date = datetime.datetime.now()
     callback_data = "calendar_viewing_recordings_day"
     telegram_id = message.from_user.id
 
     kb = await calendar_buttons(current_date, callback_data)
-    kb.insert(
-        types.InlineKeyboardButton(
-            "Мои записи", callback_data=f"view_recordings={telegram_id}"
-        )
-    )
-    kb.insert(types.InlineKeyboardButton("Админ меню", callback_data="admin_menu"))
+    # kb.insert(
+    #     types.InlineKeyboardButton(
+    #         "Мои записи", callback_data=f"view_recordings={telegram_id}"
+    #     )
+    # )
+    # kb.insert(types.InlineKeyboardButton("Админ меню", callback_data="admin_menu"))
+
+    kb.button(text="Мои записи", callback_data=f"view_recordings={telegram_id}")
+    kb.button(text="Админ меню", callback_data="admin_menu")
+
+    kb.adjust(3, 7)
+    kb = kb.as_markup()
+
     await message.message.answer("Введите дату, формат ДД-ММ-ГГГГ", reply_markup=kb)
 
 
-@dp.callback_query_handler(
-    lambda callback_query: callback_query.data.startswith(
-        "calendar_viewing_recordings_day"
-    )
-)
+# @dp.callback_query_handler(
+#     lambda callback_query: callback_query.data.startswith(
+#         "calendar_viewing_recordings_day"
+#     )
+# )
 async def viewing_recordings_day_2(message: [types.CallbackQuery, types.Message]):
     selected_date = datetime.datetime.strptime(
         message.data.split("_")[4], "%Y-%m-%d %H:%M:%S.%f"

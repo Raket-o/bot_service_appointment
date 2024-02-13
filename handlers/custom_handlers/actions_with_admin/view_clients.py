@@ -1,14 +1,14 @@
 """ Модуль обработки каллбэка с датой operations_students"""
 from aiogram import types
-from aiogram.dispatcher import FSMContext
+from aiogram.fsm.context import FSMContext
 
 from database import database
 from keyboards.inline.back_admin_menu import back_admin_menu_button
 from keyboards.inline.detail_client import details_client_buttons
-from loader import dp
+# from loader import dp
 
 
-@dp.callback_query_handler(lambda callback_query: callback_query.data == "view_clients")
+# @dp.callback_query_handler(lambda callback_query: callback_query.data == "view_clients")
 async def view_clients(
     message: [types.CallbackQuery, types.Message], state: FSMContext
 ) -> None:
@@ -42,4 +42,4 @@ async def view_clients(
 
     kb = back_admin_menu_button()
     await message.message.answer("Вернуться в админ в меню?", reply_markup=kb)
-    await state.finish()
+    await state.clear()
