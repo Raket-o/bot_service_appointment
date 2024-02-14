@@ -28,6 +28,9 @@ async def on_shutdown():
     logger.info("Bot stopped")
 
 bot = Bot(token=BOT_TOKEN, parse_mode=ParseMode.HTML)
+loop = get_event_loop()
+
+# dp = Dispatcher(bot=bot, loop=loop)
 dp = Dispatcher()
 
 
@@ -36,10 +39,7 @@ dp = Dispatcher()
 # loop = get_event_loop()
 # # dp = Dispatcher(bot=bot, storage=storage, loop=loop)
 # dp = Dispatcher(bot=bot, loop=loop)
-#
-# # dp.middleware.setup(WhoHereMiddleware())
-# # dp.message.middleware(WhoHereMiddleware())
-# # dp.callback_query.middleware(WhoHereMiddleware())
-#
+
+
 # from utils.restart_services import restarting_services
 # asyncio.ensure_future(restarting_services())

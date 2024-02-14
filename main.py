@@ -9,6 +9,7 @@ from config_data.config import BOT_TOKEN
 # from handlers.default_heandlers import start
 from handlers.routers import register_routers
 from middlewares.who_here import WhoHereMiddleware
+from utils.restart_services import restarting_services
 
 from loader import on_shutdown, start_up, bot, dp
 from utils.logging import logger_root
@@ -37,6 +38,8 @@ async def main(bot, dp) -> None:
     dp.callback_query.middleware(WhoHereMiddleware())
 
     register_routers(dp)
+
+    asyncio.ensure_future(restarting_services())
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)

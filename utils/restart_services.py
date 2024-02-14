@@ -3,6 +3,7 @@ import asyncio
 import datetime
 
 from database import database
+from config_data.config import LOCAL_UTC, REMINDER_TIME
 
 
 async def restarting_services() -> None:
@@ -15,14 +16,38 @@ async def restarting_services() -> None:
     database.deleting_records_older_7_days()
     database.deletes_old_users()
 
-    while True:
-        current_date = datetime.datetime.now()
+    try:
+        reminder_time = REMINDER_TIME.split(":")
+        reminder_hour = int(reminder_time[0])
+        reminder_minute = int(reminder_time[1])
 
-        if current_date.hour == 8 and current_date.minute == 30:
+    except (IndexError, ValueError):
+        reminder_hour = 8
+        reminder_minute = 30
+
+    while True:
+        current_datetime = datetime.datetime.utcnow()
+        region_time = current_datetime
+
+        try:
+            if LOCAL_UTC:
+                if LOCAL_UTC[0] == "+":
+                    region_time = current_datetime.replace(
+                        hour=current_datetime.hour + int(LOCAL_UTC[1])
+                    )
+
+                elif LOCAL_UTC[0] == "-":
+                    region_time = current_datetime.replace(
+                        hour=current_datetime.hour - int(LOCAL_UTC[1])
+                    )
+        except ValueError:
+            pass
+
+        if region_time.hour == reminder_hour and region_time.minute == reminder_minute:
             database.deleting_records_older_7_days()
             database.deletes_old_users()
 
             from utils.misc.reminder import reminder
-            await reminder(current_date)
+            await reminder(region_time)
 
         await asyncio.sleep(60)

@@ -33,6 +33,7 @@ async def calendar_buttons(date: datetime, action: str) -> InlineKeyboardBuilder
     """
 
     current_datetime = datetime.datetime.now()
+    # current_datetime.replace(hour=)
     # print(action)
     # date = date.replace(month=5)
     # print("===================================calendar_buttonscalendar_buttonscalendar_buttonscalendar_buttonscalendar_buttonscalendar_buttons")
