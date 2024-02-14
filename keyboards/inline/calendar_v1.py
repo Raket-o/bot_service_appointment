@@ -1,4 +1,4 @@
-"""Модуль создания клавиатуры календаря."""
+"""Модуль создания клавиатуры календаря"""
 import calendar
 import datetime
 
@@ -31,18 +31,9 @@ async def calendar_buttons(date: datetime, action: str) -> InlineKeyboardBuilder
     Функция создания клавиатуры календаря.
     :return: InlineKeyboardMarkup
     """
-
     current_datetime = datetime.datetime.now()
-    # current_datetime.replace(hour=)
-    # print(action)
-    # date = date.replace(month=5)
-    # print("===================================calendar_buttonscalendar_buttonscalendar_buttonscalendar_buttonscalendar_buttonscalendar_buttons")
 
     keyboard_builder = InlineKeyboardBuilder()
-    # keyboard_builder.adjust(3, 7)
-
-    # keyboard_builder.row(width=5)
-
 
     if date.month == current_datetime.month:
         text_btn = (
@@ -54,21 +45,11 @@ async def calendar_buttons(date: datetime, action: str) -> InlineKeyboardBuilder
         text_btn = (
             ("<--", f"start_command={action}"),
             (NAMES_MONTH[date.month], "ignore"),
-            # ("-->", f"calendar_next_month={action}"),
             ("🎉🎁🎄", "ignore"),
         )
 
     for text in text_btn:
         keyboard_builder.button(text=text[0], callback_data=text[1])
-
-    # btn = []
-    # for text in text_btn:
-    #     btn.append(InlineKeyboardButton(text=text[0], callback_data=text[1]))
-
-    # keyboard_builder.row(*btn, width=1)
-
-
-    # keyboard_builder.adjust(3, 7)
 
     for day in NAMES_DAYS:
         keyboard_builder.button(text=day, callback_data="ignore")
@@ -80,115 +61,20 @@ async def calendar_buttons(date: datetime, action: str) -> InlineKeyboardBuilder
 
     btns = []
     for _ in range(date.weekday()):
-        # keyboard_builder.button(text=" ", callback_data="ignore")
         btns.append(InlineKeyboardButton(text=" ", callback_data="ignore"))
 
-    # btns = []
     for day_num in obj.itermonthdays(date.year, date.month):
         if day_num >= date.day:
             if day_num in list_weekends and action == "calendar_day":
-                # keyboard_builder.button(text=str(day_num), callback_data="weekend")
                 btns.append(InlineKeyboardButton(text=str(day_num), callback_data="weekend"))
             else:
                 callback_data = f"{action}_{date.replace(day=day_num)}"
-                # keyboard_builder.button(text=str(day_num), callback_data=callback_data)
                 btns.append(InlineKeyboardButton(text=str(day_num), callback_data=callback_data))
 
     keyboard_builder.row(*btns, width=7)
 
     add_count_btn = 7 - len(keyboard_builder.__dict__["_markup"][-1])
-    # print("add_count_btn", add_count_btn)
     for _ in range(add_count_btn):
         keyboard_builder.button(text=" ", callback_data="ignore")
 
-    # from pprint import pprint
-    # pprint(keyboard_builder.__dict__)
-
-    # keyboard_builder.adjust(3, 7)
     return keyboard_builder
-    # return keyboard_builder.as_markup()
-
-
-
-
-
-    # ikeyboard = InlineKeyboardMarkup(row_width=7)
-    # ikeyboard = InlineKeyboardMarkup()
-
-    # current_datetime = datetime.datetime.now()
-    #
-    # if date.month == current_datetime.month:
-    #     text_btn = (
-    #         ("🍪🎅🎁", "ignore"),
-    #         (NAMES_MONTH[date.month], "ignore"),
-    #         ("-->", f"calendar_next_month={action}"),
-    #     )
-    # else:
-    #     text_btn = (
-    #         ("<--", f"start_command={action}"),
-    #         (NAMES_MONTH[date.month], "ignore"),
-    #         ("🎉🎁🎄", "ignore"),
-    #     )
-
-    # for text in text_btn:
-    # ikeyboard = InlineKeyboardMarkup(
-    #     inline_keyboard=[
-    #         [
-    #         InlineKeyboardButton(text=text[0], callback_data=text[1] for text in text_btn)]
-    # ]
-    # )
-
-    # for text in text_btn:
-    #     ikeyboard = InlineKeyboardMarkup(
-    #         inline_keyboard=[
-    #             [InlineKeyboardButton(text=text[0], callback_data=text[1])],
-    #         ],
-    #     )
-
-
-
-
-    # ikeyboard = InlineKeyboardMarkup(*(
-    #         InlineKeyboardButton(text=text[0], callback_data=text[1])
-    #         for text in text_btn)
-    #                                  )
-    # ikeyboard.add(
-    #     *(
-    #         InlineKeyboardButton(text=text[0], callback_data=text[1])
-    #         for text in text_btn
-    #     )
-    # )
-
-    # ikeyboard.add(
-    #     *(InlineKeyboardButton(text=day, callback_data="ignore") for day in NAMES_DAYS)
-    # )
-
-    # obj = calendar.Calendar()
-    #
-    # day_in_month = [num_day for num_day in obj.itermonthdays(date.year, date.month) if num_day >= date.day]
-    # list_weekends = get_list_weekends(start_day=day_in_month[0], end_day=day_in_month[-1], date=date)
-    #
-    # for _ in range(date.weekday()):
-    #     ikeyboard.insert(InlineKeyboardButton(text=" ", callback_data="ignore"))
-    #
-    # for day_num in obj.itermonthdays(date.year, date.month):
-    #     if day_num >= date.day:
-    #         if day_num in list_weekends and action == "calendar_day":
-    #             ikeyboard.insert(
-    #                 InlineKeyboardButton(text=str(day_num), callback_data="weekend")
-    #             )
-    #         else:
-    #             callback_data = f"{action}_{date.replace(day=day_num)}"
-    #             ikeyboard.insert(
-    #                 InlineKeyboardButton(text=str(day_num), callback_data=callback_data)
-    #             )
-    #
-    # add_count_btn = 7 - len(ikeyboard.values["inline_keyboard"][-1])
-    # for _ in range(add_count_btn):
-    #     ikeyboard.insert(InlineKeyboardButton(text=" ", callback_data="ignore"))
-
-    # return ikeyboard
-
-
-
-

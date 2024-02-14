@@ -1,1 +1,1 @@
-from . import weekend_reservations
+from . import reminder, weekend_reservations

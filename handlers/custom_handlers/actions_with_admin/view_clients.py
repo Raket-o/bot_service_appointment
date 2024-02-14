@@ -1,20 +1,18 @@
-""" Модуль обработки каллбэка с датой operations_students"""
+"""Модуль вывода всех пользователей"""
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 
 from database import database
 from keyboards.inline.back_admin_menu import back_admin_menu_button
 from keyboards.inline.detail_client import details_client_buttons
-# from loader import dp
 
 
-# @dp.callback_query_handler(lambda callback_query: callback_query.data == "view_clients")
 async def view_clients(
     message: [types.CallbackQuery, types.Message], state: FSMContext
 ) -> None:
     """
-    Функция operations_students. Каллбэка с датой operations_students запускает данную функцию.
-    Выводит клавиатуру с действиями по событиям и завершает ожидания состояния.
+    Функция view_clients. Коллбэк с датой view_clients запускает данную функцию.
+    Вывод всех пользователей.
     """
     lst_clients = database.view_clients()
 

@@ -5,13 +5,9 @@ from aiogram.fsm.context import FSMContext
 from database import database
 from keyboards.inline.back_admin_menu import back_admin_menu_button
 from keyboards.inline.detail_client import details_client_buttons
-# from loader import dp
 from states.states import ServiceDateState
 
 
-# @dp.callback_query_handler(
-#     lambda callback_query: callback_query.data == "search_client"
-# )
 async def search_client_1(message: types.Message, state: FSMContext):
     """
     Функция search_client_1. Коллбэк с датой search_client запускает данную функцию.
@@ -19,10 +15,8 @@ async def search_client_1(message: types.Message, state: FSMContext):
     """
     await message.message.answer("Введите имя, фамилию или номер телефона")
     await state.set_state(ServiceDateState.search_client)
-    # await ServiceDateState.search_client.set()
 
 
-# @dp.message_handler(state=ServiceDateState.search_client)
 async def search_client_2(
     message: types.Message, state: FSMContext
 ):

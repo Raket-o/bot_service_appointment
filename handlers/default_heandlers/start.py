@@ -1,5 +1,6 @@
 """ Модуль команды /start"""
 import datetime
+import logging
 
 from aiogram import types
 from aiogram.types import ReplyKeyboardRemove
@@ -7,21 +8,16 @@ from aiogram.types import ReplyKeyboardRemove
 from config_data.config import ADMINS_TELEGRAM_ID, START_MESSAGE
 from database import database
 from keyboards.inline.calendar_v1 import calendar_buttons
-# from loader import dp
 
 
-# @dp.message_handler(commands=["start"])
-# @dp.callback_query_handler(
-#     lambda callback_query: callback_query.data.startswith("start_command=")
-# )
+start_logger = logging.getLogger(__name__)
+
+
 async def start_command(message: [types.CallbackQuery, types.Message]) -> None:
     """
     Вывод тест START_MESSAGE и календарь.
     Если пользователя админ, то добавляет кнопки админ меню
     """
-
-    print("========start_command===================", message)
-
     try:
         callback_data = message.data.split("=")[1]
     except AttributeError:
@@ -47,23 +43,14 @@ async def start_command(message: [types.CallbackQuery, types.Message]) -> None:
     kb.adjust(3, 7)
     kb = kb.as_markup()
 
-    # kb.insert(
-    #     types.InlineKeyboardButton(
-    #         "Мои записи", callback_data=f"view_recordings={telegram_id}"
-    #     )
-    # )
-    #
-    # if telegram_id in ADMINS_TELEGRAM_ID:
-    #     kb.insert(types.InlineKeyboardButton("Админ меню", callback_data="admin_menu"))
-
     if isinstance(message, types.Message):
         await message.answer(
             START_MESSAGE, parse_mode="HTML", reply_markup=ReplyKeyboardRemove()
         )
-        await message.answer("Выберите дату:", reply_markup=kb)
+        await message.answer(text="Выберите дату:", reply_markup=kb)
 
     elif isinstance(message, types.CallbackQuery):
-        await message.message.answer("Выберите дату:", reply_markup=kb)
+        await message.message.answer(text="Выберите дату:", reply_markup=kb)
         await message.message.delete()
 
-
+    start_logger.info(f"start_logger-UserID={telegram_id} {full_name}")

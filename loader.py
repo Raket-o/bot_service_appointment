@@ -5,7 +5,6 @@ from asyncio import ensure_future, get_event_loop
 
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
-
 from aiogram.fsm.context import FSMContext
 
 from database.database import init_db
@@ -14,7 +13,10 @@ from middlewares.who_here import WhoHereMiddleware
 from utils.restart_services import restarting_services
 
 
-logger = logging.getLogger("logger_loader")
+# logger = logging.getLogger("logger_info")
+# logger = logging.getLogger()
+logger = logging.getLogger("logger_info")
+
 
 
 async def start_up():
@@ -29,17 +31,4 @@ async def on_shutdown():
 
 bot = Bot(token=BOT_TOKEN, parse_mode=ParseMode.HTML)
 loop = get_event_loop()
-
-# dp = Dispatcher(bot=bot, loop=loop)
 dp = Dispatcher()
-
-
-# bot = Bot(token=config.BOT_TOKEN)
-# # storage = MemoryStorage()
-# loop = get_event_loop()
-# # dp = Dispatcher(bot=bot, storage=storage, loop=loop)
-# dp = Dispatcher(bot=bot, loop=loop)
-
-
-# from utils.restart_services import restarting_services
-# asyncio.ensure_future(restarting_services())

@@ -1,3 +1,4 @@
+"""Модуль вывода записей определённого пользователя"""
 import datetime
 
 from aiogram import types
@@ -5,13 +6,13 @@ from aiogram.fsm.context import FSMContext
 
 from database import database
 from keyboards.reply.list_button import list_button
-# from loader import dp
 
 
-# @dp.callback_query_handler(
-#     lambda callback_query: callback_query.data.startswith("view_rec_client=")
-# )
 async def view_rec(message: [types.CallbackQuery, types.Message], state: FSMContext):
+    """
+    Функция view_clients. Коллбэк с датой view_rec_client= запускает данную функцию.
+    Функция выводит записи определённого пользователя.
+    """
     telegram_id = message.data.split("=")[1]
     res = database.view_client_records(telegram_id)
 
