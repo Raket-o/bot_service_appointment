@@ -5,7 +5,7 @@ from aiogram import types
 from aiogram.fsm.context import FSMContext
 
 from config_data import config
-from database import database
+from database import transactions
 from keyboards.inline.back_admin_menu import back_admin_menu_button
 from keyboards.inline.calendar_v1 import calendar_buttons
 from keyboards.inline.confirm_yes_no import conf_yes_no_button
@@ -59,14 +59,14 @@ async def reserve_day_3(message: [types.CallbackQuery, types.Message]):
     date = data[1].split()[0]
     date = datetime.datetime.strptime(date, "%Y-%m-%d")
 
-    res = database.mailing_for_day(date)
+    res = transactions.mailing_for_day(date)
 
     sending_text = f"Ваша запись на {date.day}-{date.month}-{date.year} аннулирована"
 
     for client in res:
         await bot.send_message(chat_id=client[0], text=sending_text, parse_mode="HTML")
 
-    database.reserve_day(
+    transactions.reserve_day(
         telegram_id, date, config.BEGINNING_WORKING_DAY, config.END_WORKING_DAY
     )
 

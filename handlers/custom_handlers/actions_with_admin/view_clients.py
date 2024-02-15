@@ -2,7 +2,7 @@
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 
-from database import database
+from database import transactions
 from keyboards.inline.back_admin_menu import back_admin_menu_button
 from keyboards.inline.detail_client import details_client_buttons
 
@@ -14,11 +14,11 @@ async def view_clients(
     Функция view_clients. Коллбэк с датой view_clients запускает данную функцию.
     Вывод всех пользователей.
     """
-    lst_clients = database.view_clients()
+    lst_clients = transactions.view_clients()
 
     if lst_clients:
         for client in lst_clients:
-            count_date_rec = database.count_date_rec(client[0])
+            count_date_rec = transactions.count_date_rec(client[0])
             last_visit_date = client[4].split()
             last_visit_date = last_visit_date[0].split("-")
             last_visit_date = (

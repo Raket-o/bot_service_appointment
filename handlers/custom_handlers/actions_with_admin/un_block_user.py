@@ -1,7 +1,7 @@
 """Модуль разбловировки\блокировки пользователя"""
 from aiogram import types
 
-from database import database
+from database import transactions
 from keyboards.inline.admin_buttons import admin_buttons
 
 
@@ -15,8 +15,8 @@ async def unblocked_user(message: [types.CallbackQuery, types.Message]):
     kb = admin_buttons()
 
     if action == "bl":
-        database.block_unblock_user(telegram_id, action)
+        transactions.block_unblock_user(telegram_id, action)
         await message.message.answer("Клиент заблокирован", reply_markup=kb)
     else:
-        database.block_unblock_user(telegram_id, action)
+        transactions.block_unblock_user(telegram_id, action)
         await message.message.answer("Клиент разблокирован", reply_markup=kb)

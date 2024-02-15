@@ -4,7 +4,7 @@ import datetime
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 
-from database import database
+from database import transactions
 from keyboards.reply.list_button import list_button
 
 
@@ -14,7 +14,7 @@ async def view_rec(message: [types.CallbackQuery, types.Message], state: FSMCont
     Функция выводит записи определённого пользователя.
     """
     telegram_id = message.data.split("=")[1]
-    res = database.view_client_records(telegram_id)
+    res = transactions.view_client_records(telegram_id)
 
     if res:
         list_to_btn = []

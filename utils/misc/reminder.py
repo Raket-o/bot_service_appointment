@@ -1,7 +1,7 @@
 """Модуль напоминая о записи"""
 import datetime
 
-from database import database
+from database import transactions
 from loader import bot
 
 

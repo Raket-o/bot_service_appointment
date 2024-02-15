@@ -6,7 +6,7 @@ from aiogram import types
 from aiogram.types import ReplyKeyboardRemove
 
 from config_data.config import ADMINS_TELEGRAM_ID, START_MESSAGE
-from database import database
+from database import transactions
 from keyboards.inline.calendar_v1 import calendar_buttons
 
 
@@ -25,12 +25,12 @@ async def start_command(message: [types.CallbackQuery, types.Message]) -> None:
 
     telegram_id = message.from_user.id
     full_name = message.from_user.full_name
-    res = database.user_check(telegram_id)
+    res = transactions.user_check(telegram_id)
 
     if not res:
-        database.add_user(telegram_id, full_name)
+        transactions.add_user(telegram_id, full_name)
 
-    database.update_visit_date(telegram_id)
+    transactions.update_visit_date(telegram_id)
 
     current_date = datetime.datetime.now()
 

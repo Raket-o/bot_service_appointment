@@ -3,7 +3,7 @@ import datetime
 
 from aiogram import types
 
-from database import database
+from database import transactions
 from keyboards.inline.back_admin_menu import back_admin_menu_button
 from keyboards.inline.calendar_v1 import calendar_buttons
 
@@ -34,7 +34,7 @@ async def viewing_recordings_day_2(message: [types.CallbackQuery, types.Message]
         message.data.split("_")[4], "%Y-%m-%d %H:%M:%S.%f"
     )
 
-    res = database.viewing_recordings_day_db(selected_date)
+    res = transactions.viewing_recordings_day_db(selected_date)
 
     if res:
         for user in res:

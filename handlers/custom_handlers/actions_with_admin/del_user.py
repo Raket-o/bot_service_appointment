@@ -1,7 +1,7 @@
 """Модуль удаление пользователя."""
 from aiogram import types
 
-from database import database
+from database import transactions
 from keyboards.inline.admin_buttons import admin_buttons
 
 
@@ -11,7 +11,7 @@ async def delete_user(message: [types.CallbackQuery, types.Message]):
     Удаляет пользователя.
     """
     telegram_id = message.data.split("=")[1]
-    database.del_user(int(telegram_id))
+    transactions.del_user(int(telegram_id))
 
     kb = admin_buttons()
     await message.message.answer("Клиент удалён", reply_markup=kb)

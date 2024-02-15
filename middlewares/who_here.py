@@ -6,7 +6,7 @@ from aiogram.types import Message, CallbackQuery
 from typing import Any, Awaitable, Callable, Union
 
 from config_data.config import ADMINS_TELEGRAM_ID
-from database import database
+from database import transactions
 
 
 class WhoHereMiddleware(BaseMiddleware):
@@ -20,7 +20,7 @@ class WhoHereMiddleware(BaseMiddleware):
     ) -> Any:
 
         user_telegram_id = event.from_user.id
-        res = database.user_check(user_telegram_id)
+        res = transactions.user_check(user_telegram_id)
 
         if res:
             if res[0]:

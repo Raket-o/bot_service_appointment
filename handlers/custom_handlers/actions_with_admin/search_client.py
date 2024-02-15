@@ -2,7 +2,7 @@
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 
-from database import database
+from database import transactions
 from keyboards.inline.back_admin_menu import back_admin_menu_button
 from keyboards.inline.detail_client import details_client_buttons
 from states.states import ServiceDateState
@@ -25,11 +25,11 @@ async def search_client_2(
     Вывод пользователя найденных клиентов по имени, фамилии или номеру телефона.
     """
     input_text = message.text
-    lst_clients = database.search_client(input_text)
+    lst_clients = transactions.search_client(input_text)
 
     if lst_clients:
         for client in lst_clients:
-            count_date_rec = database.count_date_rec(client[0])
+            count_date_rec = transactions.count_date_rec(client[0])
             last_visit_date = client[4].split()
             last_visit_date = last_visit_date[0].split("-")
             last_visit_date = (

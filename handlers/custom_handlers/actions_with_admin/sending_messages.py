@@ -4,7 +4,7 @@ import datetime
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 
-from database import database
+from database import transactions
 from keyboards.inline.back_admin_menu import back_admin_menu_button
 from keyboards.inline.calendar_v1 import calendar_buttons
 from keyboards.inline.confirm_yes_no import conf_yes_no_button
@@ -78,7 +78,7 @@ async def sending_message_4(
     context_data = await state.get_data()
     sending_text, date = context_data.get("sending_text"), context_data.get("date")
 
-    res = database.mailing_for_day(date)
+    res = transactions.mailing_for_day(date)
 
     for client in res:
         await bot.send_message(chat_id=client[0], text=sending_text, parse_mode="HTML")

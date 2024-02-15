@@ -4,7 +4,7 @@ import datetime
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 
-from database import database
+from database import transactions
 from keyboards.reply.list_button import list_button
 from states.states import ServiceDateState
 
@@ -12,7 +12,7 @@ from states.states import ServiceDateState
 async def view_recordings(message: types.Message, state: FSMContext):
     """Функция view_recordings. Запрашивает в базе записи и выводит их пользователю."""
     telegram_id = message.data.split("=")[1]
-    res = database.view_record(telegram_id)
+    res = transactions.view_record(telegram_id)
 
     for_btn = []
     if res:

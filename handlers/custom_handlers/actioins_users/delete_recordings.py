@@ -2,7 +2,7 @@
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 
-from database import database
+from database import transactions
 from handlers.default_heandlers.start import start_command
 from keyboards.reply.list_button import list_button
 from states.states import ServiceDateState
@@ -48,7 +48,7 @@ async def delete_recordings_2(
     else:
         context_data = await state.get_data()
         date, hour = context_data.get("date"), context_data.get("hour")
-        database.del_record(date, hour)
+        transactions.del_record(date, hour)
 
         await state.clear()
         await start_command(message)

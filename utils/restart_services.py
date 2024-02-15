@@ -2,7 +2,7 @@
 import asyncio
 import datetime
 
-from database import database
+from database import transactions
 from config_data.config import LOCAL_UTC, REMINDER_TIME
 
 
@@ -13,8 +13,8 @@ async def restarting_services() -> None:
     (которые заходили более полгода назад),
     резервирует выходные дни на 2 месяца и отправляет напоминания о записи
     """
-    database.deleting_records_older_7_days()
-    database.deletes_old_users()
+    transactions.deleting_records_older_7_days()
+    transactions.deletes_old_users()
 
     try:
         reminder_time = REMINDER_TIME.split(":")
@@ -44,8 +44,9 @@ async def restarting_services() -> None:
             pass
 
         if region_time.hour == reminder_hour and region_time.minute == reminder_minute:
-            database.deleting_records_older_7_days()
-            database.deletes_old_users()
+            transactions.deleting_records_older_7_days()
+            transactions.deletes_old_users()
+            transactions.deletes_old_users()
 
             from utils.misc.reminder import reminder
             await reminder(region_time)

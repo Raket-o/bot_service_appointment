@@ -6,7 +6,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import ReplyKeyboardRemove
 
 from config_data import config
-from database import database
+from database import transactions
 from handlers.default_heandlers.start import start_command
 from keyboards.reply.list_button import list_button
 from keyboards.reply.phone_request import contact_button
@@ -32,7 +32,7 @@ async def service_appointment_1(message: types.Message, state: FSMContext):
         f"Выбрана дата: {selected_date.day}-{selected_date.month}-{selected_date.year}"
     )
 
-    res = database.get_date_time_appointment(selected_date)
+    res = transactions.get_date_time_appointment(selected_date)
 
     if res:
         working_hours = [
@@ -122,9 +122,9 @@ async def service_appointment_3(message: types.Message, state: FSMContext):
     context_data = await state.get_data()
     selected_date = context_data.get("selected_date")
 
-    res = database.check_date_time_appointment(selected_date)
+    res = transactions.check_date_time_appointment(selected_date)
     if not res:
-        database.set_date_time_appointment(contact, selected_date)
+        transactions.set_date_time_appointment(contact, selected_date)
 
         sending_text = f"""Новая запись!!!
     Имя: {contact.last_name if contact.last_name else ""} {contact.first_name if contact.first_name else ""}
