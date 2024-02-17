@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 
 # for sync
 from sqlalchemy import create_engine
-DATABASE_URL = "sqlite:///./database.db"
+DATABASE_URL = "sqlite:///./databaseALCH.db"
 engine = create_engine(DATABASE_URL, echo=True)
 Base = declarative_base()
 Session = sessionmaker(bind=engine)

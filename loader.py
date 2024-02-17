@@ -7,21 +7,16 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.fsm.context import FSMContext
 
-from database.transactions import init_db
 from config_data.config import BOT_TOKEN
 from middlewares.who_here import WhoHereMiddleware
 from utils.restart_services import restarting_services
 
 
-# logger = logging.getLogger("logger_info")
-# logger = logging.getLogger()
 logger = logging.getLogger("logger_info")
-
 
 
 async def start_up():
     """Функция start_up. При запуске выводит текст в консоль"""
-    init_db()
     logger.info("Bot started")
 
 

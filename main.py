@@ -6,13 +6,11 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 
 from config_data.config import BOT_TOKEN
+from database.transactions import init_db
 from handlers.routers import register_routers
 from loader import on_shutdown, start_up, bot, dp
 from middlewares.who_here import WhoHereMiddleware
 from utils.restart_services import restarting_services
-
-logger_errors = logging.getLogger("logger_errors")
-logger_info = logging.getLogger("logger_info")
 
 
 async def main(bot: Bot, dp: Dispatcher) -> None:
@@ -23,6 +21,8 @@ async def main(bot: Bot, dp: Dispatcher) -> None:
     dp.callback_query.middleware(WhoHereMiddleware())
 
     register_routers(dp)
+
+    init_db()
 
     asyncio.ensure_future(restarting_services())
 

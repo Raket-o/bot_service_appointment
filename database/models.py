@@ -21,27 +21,32 @@ from database.connect import Base, engine, session
 
 
 class UserInfo(Base):
+
     __tablename__ = "user_info"
     __table_args__ = {'extend_existing': True}
 
-    id = Column(Integer)
+    # id = Column(Integer, nullable=True, autoincrement=True)
     telegramm_id = Column(Integer, nullable=False, primary_key=True)
-
     full_name = Column(String(50), nullable=False)
     telephone = Column(String(20), nullable=True)
     blocked = Column(Boolean)
     last_visit_date = Column(String(50), nullable=True)
+    record = relationship("RecordDate", cascade="all,delete", backref=backref('telegramm_id', passive_deletes=True), lazy="select")
 
 
 class RecordDate(Base):
+
     __tablename__ = "record_dates"
     __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True)
-    telegram_id = Column(Integer, nullable=False)
+    # telegram_id = Column(Integer, nullable=False)
+    telegram_id = Column(Integer, ForeignKey('user_info.telegramm_id', ondelete='CASCADE'), nullable=False)
+
     date = Column(String(50), nullable=False)
     hour = Column(Integer, nullable=False)
-    blocked = Column(Boolean)
+    # user = relationship("UserInfo", cascade="all", backref=backref('telegram_id', passive_deletes=True), lazy="select")
+
 
 
 
@@ -336,3 +341,28 @@ class RecordDate(Base):
 
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
+
+    # user1 = UserInfo(
+    #     telegramm_id = 123,
+    #     full_name = "Zora",
+    #     telephone = "200",
+    #     blocked = 0,
+    #     last_visit_date = "2024-02-16 00:30:10.956015",
+    # )
+    #
+    # user1_rec = RecordDate(
+    #     telegram_id = 123,
+    #     date = "2024-02-16 00:30:10.956015",
+    #     hour = 10,
+    # )
+    #
+    # session.add(user1)
+    # session.add(user1_rec)
+    # session.commit()
+
+
+    user = session.query(UserInfo).where(UserInfo.telegramm_id == 123).one_or_none()
+    print(user)
+    if user:
+        session.delete(user)
+        session.commit()
