@@ -11,6 +11,8 @@ from keyboards.inline.calendar_v1 import calendar_buttons
 from keyboards.inline.confirm_yes_no import conf_yes_no_button
 from loader import bot
 
+from database.transactions import datetime_trans_str
+
 
 async def reserve_day_1(message: [types.CallbackQuery, types.Message]):
     """
@@ -29,7 +31,7 @@ async def reserve_day_1(message: [types.CallbackQuery, types.Message]):
     await message.message.answer("Выберите дату:", reply_markup=kb)
 
 
-async def reserve_day_2(message: [types.CallbackQuery, types.Message]):
+async def reserve_day_2(message: [types.CallbackQuery, types.Message], state: FSMContext):
     """
     Функция reserve_day_2. Коллбэк с датой reserve_day_2 запускает данную функцию.
     Ждёт подтверждения на резерв дня.
@@ -37,9 +39,10 @@ async def reserve_day_2(message: [types.CallbackQuery, types.Message]):
     selected_date = datetime.datetime.strptime(
         message.data.split("_")[3], "%Y-%m-%d %H:%M:%S.%f"
     )
-    selected_date_message = (
-        f"{selected_date.day}-{selected_date.month}-{selected_date.year}"
-    )
+
+    selected_date_message = (datetime_trans_str(selected_date))
+
+    await state.update_data({"date": selected_date_message})
 
     kb = conf_yes_no_button(
         callback_yes=f"reserve_day={selected_date}", callback_no="admin_menu"
@@ -49,22 +52,24 @@ async def reserve_day_2(message: [types.CallbackQuery, types.Message]):
     )
 
 
-async def reserve_day_3(message: [types.CallbackQuery, types.Message]):
+async def reserve_day_3(message: [types.CallbackQuery, types.Message], state: FSMContext):
     """
     Функция reserve_day_3. Коллбэк с датой reserve_day= запускает данную функцию.
     Резервирует день.
     """
-    data = message.data.split("=")
     telegram_id = message.from_user.id
-    date = data[1].split()[0]
-    date = datetime.datetime.strptime(date, "%Y-%m-%d")
-
+    context_data = await state.get_data()
+    date = context_data.get("date")
     res = transactions.mailing_for_day(date)
+
+    date = datetime.datetime.strptime(date, "%Y-%m-%d")
 
     sending_text = f"Ваша запись на {date.day}-{date.month}-{date.year} аннулирована"
 
     for client in res:
         await bot.send_message(chat_id=client[0], text=sending_text, parse_mode="HTML")
+
+    date = f"{date.year}-{date.month}-{date.day}"
 
     transactions.reserve_day(
         telegram_id, date, config.BEGINNING_WORKING_DAY, config.END_WORKING_DAY

@@ -342,27 +342,30 @@ class RecordDate(Base):
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
 
-    # user1 = UserInfo(
-    #     telegramm_id = 123,
-    #     full_name = "Zora",
-    #     telephone = "200",
-    #     blocked = 0,
-    #     last_visit_date = "2024-02-16 00:30:10.956015",
-    # )
-    #
-    # user1_rec = RecordDate(
-    #     telegram_id = 123,
-    #     date = "2024-02-16 00:30:10.956015",
-    #     hour = 10,
-    # )
-    #
-    # session.add(user1)
-    # session.add(user1_rec)
-    # session.commit()
-
-
     user = session.query(UserInfo).where(UserInfo.telegramm_id == 123).one_or_none()
-    print(user)
+    if not user:
+        user1 = UserInfo(
+            telegramm_id = 123,
+            full_name = "Zora",
+            telephone = "200",
+            blocked = 0,
+            last_visit_date = "2024-02-16 00:30:10.956015",
+        )
+
+        user1_rec = RecordDate(
+            telegram_id = 123,
+            date = "2024-02-16 00:30:10.956015",
+            hour = 10,
+        )
+
+        session.add(user1)
+        session.add(user1_rec)
+        session.commit()
+
+
+    # user = session.query(UserInfo).where(UserInfo.telegramm_id == 123).one_or_none()
+    # print(user)
     if user:
         session.delete(user)
+    # session.delete(session.query(UserInfo).where(UserInfo.telegramm_id == 123).one_or_none())
         session.commit()

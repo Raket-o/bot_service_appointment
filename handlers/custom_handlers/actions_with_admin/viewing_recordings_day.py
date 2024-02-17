@@ -35,9 +35,14 @@ async def viewing_recordings_day_2(message: [types.CallbackQuery, types.Message]
     )
 
     res = transactions.viewing_recordings_day_db(selected_date)
+    print("viewing_recordings_day_2", "=" * 50, res)
 
     if res:
+        print("viewing_recordings_day_21", "=" * 50, res)
+
         for user in res:
+            print("viewing_recordings_day_22", "=" * 50, user)
+
             await message.message.answer(
                 f"""Клиент: {user[0]}
         Телефон: {user[1]}
