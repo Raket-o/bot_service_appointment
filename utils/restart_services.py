@@ -13,8 +13,8 @@ async def restarting_services() -> None:
     (которые заходили более полгода назад),
     резервирует выходные дни на 2 месяца и отправляет напоминания о записи
     """
-    transactions.deleting_records_older_7_days()
-    transactions.deletes_old_users()
+    await transactions.deleting_records_older_7_days()
+    await transactions.deletes_old_users()
 
     try:
         reminder_time = REMINDER_TIME.split(":")
@@ -44,9 +44,8 @@ async def restarting_services() -> None:
             pass
 
         if region_time.hour == reminder_hour and region_time.minute == reminder_minute:
-            transactions.deleting_records_older_7_days()
-            transactions.deletes_old_users()
-            transactions.deletes_old_users()
+            await transactions.deleting_records_older_7_days()
+            await transactions.deletes_old_users()
 
             from utils.misc.reminder import reminder
             await reminder(region_time)

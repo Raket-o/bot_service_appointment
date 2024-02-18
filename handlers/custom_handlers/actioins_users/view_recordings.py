@@ -11,9 +11,8 @@ from states.states import ServiceDateState
 
 async def view_recordings(message: types.Message, state: FSMContext):
     """Функция view_recordings. Запрашивает в базе записи и выводит их пользователю."""
-    print("-"*150)
     telegram_id = message.data.split("=")[1]
-    res = transactions.view_record(telegram_id)
+    res = await transactions.view_record(telegram_id)
 
     for_btn = []
     if res:

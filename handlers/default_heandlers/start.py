@@ -25,12 +25,12 @@ async def start_command(message: [types.CallbackQuery, types.Message]) -> None:
 
     telegram_id = message.from_user.id
     full_name = message.from_user.full_name
-    res = transactions.user_check(telegram_id)
+    res = await transactions.user_check(telegram_id)
 
     if not res:
-        transactions.add_user(telegram_id, full_name)
+        await transactions.add_user(telegram_id, full_name)
 
-    transactions.update_visit_date(telegram_id)
+    await transactions.update_visit_date(telegram_id)
 
     current_date = datetime.datetime.now()
 

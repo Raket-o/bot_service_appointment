@@ -25,23 +25,23 @@ async def search_client_2(
     Вывод пользователя найденных клиентов по имени, фамилии или номеру телефона.
     """
     input_text = message.text
-    lst_clients = transactions.search_client(input_text)
+    lst_clients = await transactions.search_client(input_text)
 
     if lst_clients:
         for client in lst_clients:
-            count_date_rec = transactions.count_date_rec(client.telegramm_id)
-            last_visit_date = client.last_visit_date.split()
+            count_date_rec = await transactions.count_date_rec(client[0].telegramm_id)
+            last_visit_date = client[0].last_visit_date.split()
             last_visit_date = last_visit_date[0].split("-")
             last_visit_date = (
                 f"{last_visit_date[2]}-{last_visit_date[1]}-{last_visit_date[0]}"
             )
 
-            kb = details_client_buttons(client.telegramm_id, client.blocked)
+            kb = details_client_buttons(client[0].telegramm_id, client[0].blocked)
 
             await message.answer(
-                f"""Полное имя: {client.full_name}
-    Телефон: {client.telephone}
-    Статус: {"Заблокирован" if client.blocked else "Разблокирован"}
+                f"""Полное имя: {client[0].full_name}
+    Телефон: {client[0].telephone}
+    Статус: {"Заблокирован" if client[0].blocked else "Разблокирован"}
     Количество записей: {count_date_rec[0]}     
     Последний вход: {last_visit_date}        
         """,

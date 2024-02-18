@@ -15,8 +15,8 @@ async def unblocked_user(message: [types.CallbackQuery, types.Message]):
     kb = admin_buttons()
 
     if action == "bl":
-        transactions.block_unblock_user(telegram_id, action)
+        await transactions.block_unblock_user(telegram_id, action)
         await message.message.answer("Клиент заблокирован", reply_markup=kb)
     else:
-        transactions.block_unblock_user(telegram_id, action)
+        await transactions.block_unblock_user(telegram_id, action)
         await message.message.answer("Клиент разблокирован", reply_markup=kb)

@@ -11,8 +11,6 @@ from keyboards.inline.calendar_v1 import calendar_buttons
 from keyboards.inline.confirm_yes_no import conf_yes_no_button
 from loader import bot
 
-from database.transactions import datetime_trans_str
-
 
 async def reserve_day_1(message: [types.CallbackQuery, types.Message]):
     """
@@ -40,7 +38,7 @@ async def reserve_day_2(message: [types.CallbackQuery, types.Message], state: FS
         message.data.split("_")[3], "%Y-%m-%d %H:%M:%S.%f"
     )
 
-    selected_date_message = (datetime_trans_str(selected_date))
+    selected_date_message = transactions.datetime_trans_str(selected_date)
 
     await state.update_data({"date": selected_date_message})
 
@@ -60,7 +58,7 @@ async def reserve_day_3(message: [types.CallbackQuery, types.Message], state: FS
     telegram_id = message.from_user.id
     context_data = await state.get_data()
     date = context_data.get("date")
-    res = transactions.mailing_for_day(date)
+    res = await transactions.mailing_for_day(date)
 
     date = datetime.datetime.strptime(date, "%Y-%m-%d")
 
@@ -71,7 +69,7 @@ async def reserve_day_3(message: [types.CallbackQuery, types.Message], state: FS
 
     date = f"{date.year}-{date.month}-{date.day}"
 
-    transactions.reserve_day(
+    await transactions.reserve_day(
         telegram_id, date, config.BEGINNING_WORKING_DAY, config.END_WORKING_DAY
     )
 

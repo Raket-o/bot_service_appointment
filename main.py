@@ -22,7 +22,7 @@ async def main(bot: Bot, dp: Dispatcher) -> None:
 
     register_routers(dp)
 
-    init_db()
+    await init_db()
 
     asyncio.ensure_future(restarting_services())
 

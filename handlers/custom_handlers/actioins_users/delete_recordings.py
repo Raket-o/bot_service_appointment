@@ -48,7 +48,7 @@ async def delete_recordings_2(
     else:
         context_data = await state.get_data()
         date, hour = context_data.get("date"), context_data.get("hour")
-        transactions.del_record(date, hour)
+        await transactions.del_record(date, hour)
 
         await state.clear()
         await start_command(message)

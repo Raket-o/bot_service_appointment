@@ -14,7 +14,7 @@ async def view_rec(message: [types.CallbackQuery, types.Message], state: FSMCont
     Функция выводит записи определённого пользователя.
     """
     telegram_id = message.data.split("=")[1]
-    res = transactions.view_client_records(telegram_id)
+    res = await transactions.view_client_records(telegram_id)
 
     if res:
         list_to_btn = []

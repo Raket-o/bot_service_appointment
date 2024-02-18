@@ -32,7 +32,7 @@ async def service_appointment_1(message: types.Message, state: FSMContext):
         f"Выбрана дата: {selected_date.day}-{selected_date.month}-{selected_date.year}"
     )
 
-    res = transactions.get_date_time_appointment(selected_date)
+    res = await transactions.get_date_time_appointment(selected_date)
 
     if res:
         working_hours = [
@@ -122,9 +122,9 @@ async def service_appointment_3(message: types.Message, state: FSMContext):
     context_data = await state.get_data()
     selected_date = context_data.get("selected_date")
 
-    res = transactions.check_date_time_appointment(selected_date)
+    res = await transactions.check_date_time_appointment(selected_date)
     if not res:
-        transactions.set_date_time_appointment(contact, selected_date)
+        await transactions.set_date_time_appointment(contact, selected_date)
 
         sending_text = f"""Новая запись!!!
     Имя: {contact.last_name if contact.last_name else ""} {contact.first_name if contact.first_name else ""}

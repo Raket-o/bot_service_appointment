@@ -20,7 +20,7 @@ class WhoHereMiddleware(BaseMiddleware):
     ) -> Any:
 
         user_telegram_id = event.from_user.id
-        res = transactions.user_check(user_telegram_id)
+        res = await transactions.user_check(user_telegram_id)
 
         if res:
             if res[0]:

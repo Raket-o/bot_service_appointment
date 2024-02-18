@@ -14,22 +14,22 @@ async def view_clients(
     Функция view_clients. Коллбэк с датой view_clients запускает данную функцию.
     Вывод всех пользователей.
     """
-    lst_clients = transactions.view_clients()
+    lst_clients = await transactions.view_clients()
 
     if lst_clients:
         for client in lst_clients:
-            count_date_rec = transactions.count_date_rec(client.telegramm_id)
-            last_visit_date = client.last_visit_date.split()
+            count_date_rec = await transactions.count_date_rec(client[0].telegramm_id)
+            last_visit_date = client[0].last_visit_date.split()
             last_visit_date = last_visit_date[0].split("-")
             last_visit_date = (
                 f"{last_visit_date[2]}-{last_visit_date[1]}-{last_visit_date[0]}"
             )
 
-            kb = details_client_buttons(client.telegramm_id, client.blocked)
+            kb = details_client_buttons(client[0].telegramm_id, client[0].blocked)
             await message.message.answer(
-                f"""Полное имя: {client.full_name}
-            Телефон: {client.telephone if client.telephone else "нет телефона"}
-            Статус: {"заблокирован" if client.blocked else "разблокирован"}
+                f"""Полное имя: {client[0].full_name}
+            Телефон: {client[0].telephone if client[0].telephone else "нет телефона"}
+            Статус: {"заблокирован" if client[0].blocked else "разблокирован"}
             Количество записей: {count_date_rec[0]}     
             Последний вход: {last_visit_date}        
         """,

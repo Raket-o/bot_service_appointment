@@ -41,19 +41,10 @@ async def sending_message_2(
     selected_date = datetime.datetime.strptime(
         message.data.split("_")[3], "%Y-%m-%d %H:%M:%S.%f"
     )
-    # selected_date_message = (
-    #     f"{selected_date.day}-{selected_date.month}-{selected_date.year}"
-    # )
-
-    # from database.transactions import datetime_trans_str
-    # selected_date_message = datetime_trans_str(selected_date)
 
     selected_date = selected_date.replace(hour=0, minute=0, second=0, microsecond=0)
 
-
-    print("sending_message_2", "=" * 50 , type(selected_date), selected_date)
     await state.update_data({"date": selected_date})
-
 
     selected_date_message = (
         f"{selected_date.day}-{selected_date.month}-{selected_date.year}"
@@ -80,7 +71,6 @@ async def sending_message_3(
     await message.answer("Отправляю сообщение?", reply_markup=kb)
     await state.clear()
     await state.update_data({"sending_text": sending_text, "date": date})
-    # await state.update_data({"sending_text": sending_text})
 
 
 async def sending_message_4(
@@ -94,7 +84,7 @@ async def sending_message_4(
     sending_text, date = context_data.get("sending_text"), context_data.get("date")
 
     date = datetime_trans_str(date)
-    res = transactions.mailing_for_day(date)
+    res = await transactions.mailing_for_day(date)
 
     for client in res:
         await bot.send_message(chat_id=client[0], text=sending_text, parse_mode="HTML")

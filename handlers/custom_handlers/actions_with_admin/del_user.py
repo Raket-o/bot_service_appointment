@@ -11,7 +11,7 @@ async def delete_user(message: [types.CallbackQuery, types.Message]):
     Удаляет пользователя.
     """
     telegram_id = message.data.split("=")[1]
-    transactions.del_user(int(telegram_id))
+    await transactions.del_user(int(telegram_id))
 
     kb = admin_buttons()
     await message.message.answer("Клиент удалён", reply_markup=kb)
