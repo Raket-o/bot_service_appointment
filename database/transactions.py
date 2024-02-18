@@ -16,21 +16,39 @@ async def init_db() -> None:
 
 async def deleting_records_older_7_days() -> None:
     """Функция deleting_records_older_7_days. Удаляет записи старее 7 дней."""
-    sql = text(
-        """
-        DELETE FROM record_dates WHERE datetime(date) < datetime('now', '-7 days')
-        """
-    )
+    # sql = text(
+    #     """
+    #     DELETE FROM record_dates WHERE record_date < datetime('now', '-7 days')
+    #     """
+    # )
+    # await session.execute(sql)
+    # await session.commit()
 
-    # res = await session.execute(select(RecordDate).filter(
-    #     RecordDate.date < datetime.datetime.now() - datetime.timedelta(
-    #         days=7)))
-    # #
-    # res = res.all()
-    # print("deleting_records_older_7_days","="*70,res)
+    # sql = text(
+    #     """
+    #     DELETE FROM record_dates WHERE datetime(date) < datetime('now', '-7 days')
+    #     """
+    # )
+    #
+    # # res = await session.execute(select(RecordDate).filter(
+    # #     RecordDate.record_date < datetime.datetime.now() - datetime.timedelta(
+    # #         days=7)))
+    # # #
+    # # res = res.all()
+    # # print("deleting_records_older_7_days","="*70,res)
+    #
+    # await session.execute(sql)
+    # await session.commit()
 
-    await session.execute(sql)
-    await session.commit()
+    res = await session.execute(select(RecordDate))
+    res = res.all()
+    # res = res.scalar()
+
+    for obj in res:
+        record_date = datetime.datetime.strptime(obj[0].record_date, "%Y-%m-%d")
+        if record_date < datetime.datetime.now() - datetime.timedelta(days=7):
+            await session.delete(obj[0])
+            await session.commit()
 
 
 async def deletes_old_users() -> None:
@@ -82,7 +100,7 @@ async def count_date_rec(telegram_id: int) -> int:
 async def get_date_time_appointment(date: datetime) -> list[Any]:
     """Функция get_date_time_appointment. Возвращает дату и время записи пользователя."""
     date = datetime_trans_str(date)
-    res = await session.execute(select(RecordDate.hour, RecordDate.telegram_id).where(RecordDate.date == date))
+    res = await session.execute(select(RecordDate.hour, RecordDate.telegram_id).where(RecordDate.record_date == date))
     return res.all()
 
 
@@ -90,7 +108,7 @@ async def check_date_time_appointment(date: datetime) -> list[Any]:
     """Функция check_date_time_appointment. Проверяет занята дата и время записи."""
     date_execute = datetime_trans_str(date)
     res = await (session.execute(select(RecordDate.hour, UserInfo.telegramm_id).join(UserInfo, UserInfo.telegramm_id == RecordDate.telegram_id)
-           .where(RecordDate.date == date_execute, RecordDate.hour == date.hour)))
+           .where(RecordDate.record_date == date_execute, RecordDate.hour == date.hour)))
     return res.all()
 
 
@@ -107,7 +125,7 @@ async def set_date_time_appointment(contact, date: datetime) -> None:
 
     record = RecordDate(
         telegram_id = telegram_id,
-        date = date_db,
+        record_date = date_db,
         hour = int(date.hour)
     )
 
@@ -117,13 +135,13 @@ async def set_date_time_appointment(contact, date: datetime) -> None:
 
 async def view_record(telegram_id: int) -> list[Any]:
     """Функция view_record. Возвращает все записи пользователя."""
-    res = await session.execute(select(RecordDate.date, RecordDate.hour).where(RecordDate.telegram_id == telegram_id))
+    res = await session.execute(select(RecordDate.record_date, RecordDate.hour).where(RecordDate.telegram_id == telegram_id))
     return res.all()
 
 
 async def del_record(date: str, hour: int) -> None:
     """Функция del_record. Удаляет запись."""
-    record = await session.execute(select(RecordDate).where(RecordDate.date == date).where(RecordDate.hour == hour))
+    record = await session.execute(select(RecordDate).where(RecordDate.record_date == date).where(RecordDate.hour == hour))
     record = record.scalar()
 
     if record:
@@ -139,7 +157,7 @@ async def view_clients() -> list[Any]:
 
 async def view_client_records(telegram_id: int) -> list[Any]:
     """Функция view_client_records. Возвращает все записи пользователя."""
-    res = await session.execute(select(RecordDate.date, RecordDate.hour).where(RecordDate.telegram_id == telegram_id))
+    res = await session.execute(select(RecordDate.record_date, RecordDate.hour).where(RecordDate.telegram_id == telegram_id))
     return res.all()
 
 
@@ -178,7 +196,7 @@ async def reserve_day(
     records = (
         RecordDate(
             telegram_id=telegram_id,
-            date = date,
+            record_date = date,
             hour = hour
         )
         for hour in range(beginning_working_day, end_working_day + 1)
@@ -190,7 +208,7 @@ async def reserve_day(
 
 async def mailing_for_day(date: str) -> list[Any]:
     """Функция mailing_for_day. Возвращает всех пользователя кто записан на день."""
-    res = await session.execute(select(RecordDate.telegram_id).where(RecordDate.date == date).group_by(RecordDate.telegram_id))
+    res = await session.execute(select(RecordDate.telegram_id).where(RecordDate.record_date == date).group_by(RecordDate.telegram_id))
     return res.all()
 
 
@@ -199,5 +217,5 @@ async def viewing_recordings_day_db(date: datetime) -> list[Any]:
     date = datetime_trans_str(date)
     res = await (session.execute(select(UserInfo.full_name, UserInfo.telephone, RecordDate.hour).
            join(UserInfo, UserInfo.telegramm_id==RecordDate.telegram_id).
-           where(RecordDate.date == date)))
+           where(RecordDate.record_date == date)))
     return res.all()

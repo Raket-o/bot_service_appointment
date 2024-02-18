@@ -30,5 +30,5 @@ class RecordDate(Base):
 
     id = Column(Integer, primary_key=True)
     telegram_id = Column(Integer, ForeignKey('user_info.telegramm_id', ondelete='CASCADE'), nullable=False)
-    date = Column(String(50), nullable=False)
+    record_date = Column(String(50), nullable=False)
     hour = Column(Integer, nullable=False)
