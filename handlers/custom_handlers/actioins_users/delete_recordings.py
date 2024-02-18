@@ -1,4 +1,5 @@
 """Модуль обработки удаление записи."""
+import datetime
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 
@@ -22,6 +23,8 @@ async def delete_recordings_1(
         date = split_text[0].split("-")
         date = date[::-1]
         date = "-".join(date)
+        date = datetime.datetime.strptime(date, '%Y-%m-%d')
+        date = date.date()
 
         await state.update_data(
             {

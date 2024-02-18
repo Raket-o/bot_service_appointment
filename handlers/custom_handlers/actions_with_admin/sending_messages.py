@@ -19,7 +19,7 @@ async def sending_message_1(message: [types.CallbackQuery, types.Message]) -> No
     Функция sending_message_1. Коллбэк с датой sending_message запускает данную функцию.
     Выводит календарь.
     """
-    current_date = datetime.datetime.now()
+    current_date = datetime.date.today()
     callback_data = "sending_message_2"
     telegram_id = message.from_user.id
 
@@ -38,11 +38,8 @@ async def sending_message_2(
     Функция sending_message_2. Коллбэк с датой sending_message_2 запускает данную функцию.
     Запрашивает текст рассылки.
     """
-    selected_date = datetime.datetime.strptime(
-        message.data.split("_")[3], "%Y-%m-%d %H:%M:%S.%f"
-    )
-
-    selected_date = selected_date.replace(hour=0, minute=0, second=0, microsecond=0)
+    selected_date = datetime.datetime.strptime(message.data.split("_")[3], '%Y-%m-%d')
+    selected_date = selected_date.date()
 
     await state.update_data({"date": selected_date})
 
@@ -83,7 +80,6 @@ async def sending_message_4(
     context_data = await state.get_data()
     sending_text, date = context_data.get("sending_text"), context_data.get("date")
 
-    date = datetime_trans_str(date)
     res = await transactions.mailing_for_day(date)
 
     for client in res:

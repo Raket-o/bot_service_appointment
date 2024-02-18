@@ -1,4 +1,4 @@
-"""Модуль резервирования дня."""
+"""Модуль удаления всех записей на день."""
 import datetime
 
 from aiogram import types
@@ -12,13 +12,13 @@ from keyboards.inline.confirm_yes_no import conf_yes_no_button
 from loader import bot
 
 
-async def reserve_day_1(message: [types.CallbackQuery, types.Message]):
+async def del_all_record_day_1(message: [types.CallbackQuery, types.Message]):
     """
-    Функция reserve_day_1. Коллбэк с датой reserve_day запускает данную функцию.
+    Функция del_all_record_day_1. Коллбэк с датой del_all_record_day запускает данную функцию.
     выводит календарь.
     """
     current_date = datetime.date.today()
-    callback_data = "reserve_day_2"
+    callback_data = "del_all_record_day_2="
     telegram_id = message.from_user.id
 
     kb = await calendar_buttons(current_date, callback_data)
@@ -29,35 +29,34 @@ async def reserve_day_1(message: [types.CallbackQuery, types.Message]):
     await message.message.answer("Выберите дату:", reply_markup=kb)
 
 
-async def reserve_day_2(message: [types.CallbackQuery, types.Message], state: FSMContext):
+async def del_all_record_day_2(message: [types.CallbackQuery, types.Message], state: FSMContext):
     """
-    Функция reserve_day_2. Коллбэк с датой reserve_day_2 запускает данную функцию.
+    Функция del_all_record_day_2. Коллбэк с датой del_all_record_day_2 запускает данную функцию.
     Ждёт подтверждения на резерв дня.
     """
     date = datetime.datetime.strptime(
-        message.data.split("_")[3], "%Y-%m-%d"
+        message.data.split("=")[1], "_%Y-%m-%d"
     )
     date = date.date()
 
     await state.update_data({"date": date})
 
     kb = conf_yes_no_button(
-        callback_yes=f"reserve_day={date}", callback_no="admin_menu"
+        callback_yes=f"del_all_record_day={date}", callback_no="admin_menu"
     )
 
     message_date = f"{date.day}-{date.month}-{date.year}"
 
     await message.message.answer(
-        f"Выбрана дата {message_date}. Резервирую день?", reply_markup=kb
+        f"Выбрана дата {message_date}. Удаляю записи?", reply_markup=kb
     )
 
 
-async def reserve_day_3(message: [types.CallbackQuery, types.Message], state: FSMContext):
+async def del_all_record_day_3(message: [types.CallbackQuery, types.Message], state: FSMContext):
     """
-    Функция reserve_day_3. Коллбэк с датой reserve_day= запускает данную функцию.
+    Функция del_all_record_day_3. Коллбэк с датой del_all_record_day= запускает данную функцию.
     Резервирует день.
     """
-    telegram_id = message.from_user.id
     context_data = await state.get_data()
     date = context_data.get("date")
 
@@ -71,9 +70,5 @@ async def reserve_day_3(message: [types.CallbackQuery, types.Message], state: FS
     for client in res:
         await bot.send_message(chat_id=client[0], text=sending_text, parse_mode="HTML")
 
-    await transactions.reserve_day(
-        telegram_id, date, config.BEGINNING_WORKING_DAY, config.END_WORKING_DAY
-    )
-
     kb = back_admin_menu_button()
-    await message.message.answer("День зарезервирован", reply_markup=kb)
+    await message.message.answer("Записи удалены", reply_markup=kb)

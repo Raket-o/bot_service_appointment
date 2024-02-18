@@ -17,7 +17,8 @@ async def view_recordings(message: types.Message, state: FSMContext):
     for_btn = []
     if res:
         for obj in res:
-            date = datetime.datetime.strptime(obj.date[:10], "%Y-%m-%d")
+            # date = datetime.datetime.strptime(obj.record_date, "%Y-%m-%d")
+            date = obj.record_date
             for_btn.append((0, f"{date.day}-{date.month}-{date.year} в {obj.hour}:00"))
     else:
         for_btn.append((0, "Записей ещё нет"))

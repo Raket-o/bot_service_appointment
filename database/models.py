@@ -2,10 +2,9 @@
 import datetime
 
 from sqlalchemy import Column, create_engine, ForeignKey
-from sqlalchemy.orm import sessionmaker, declarative_base, relationship, backref
-from sqlalchemy.types import Boolean, Date, Integer, Text, String
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy.types import Boolean, Date, Integer, String
 
-from sqlalchemy import Column, String, Integer
 from database.connect import Base, engine, session
 
 
@@ -30,5 +29,5 @@ class RecordDate(Base):
 
     id = Column(Integer, primary_key=True)
     telegram_id = Column(Integer, ForeignKey('user_info.telegramm_id', ondelete='CASCADE'), nullable=False)
-    record_date = Column(String(50), nullable=False)
+    record_date = Column(Date, nullable=False)
     hour = Column(Integer, nullable=False)

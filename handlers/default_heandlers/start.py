@@ -33,6 +33,7 @@ async def start_command(message: [types.CallbackQuery, types.Message]) -> None:
     await transactions.update_visit_date(telegram_id)
 
     current_date = datetime.datetime.now()
+    current_date = current_date.date()
 
     kb = await calendar_buttons(current_date, callback_data)
     kb.button(text="Мои записи", callback_data=f"view_recordings={telegram_id}")

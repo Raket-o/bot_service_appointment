@@ -23,9 +23,10 @@ END_WORKING_DAY = config.END_WORKING_DAY
 async def service_appointment_1(message: types.Message, state: FSMContext):
     """Функция service_appointment_1. Выводит свободное время на день."""
     selected_date = datetime.datetime.strptime(
-        message.data.split("_")[2], "%Y-%m-%d %H:%M:%S.%f"
+        message.data.split("_")[2], "%Y-%m-%d"
     )
-    selected_date = selected_date.replace(hour=0, minute=0, second=0, microsecond=0)
+    selected_date = selected_date.date()
+    # selected_date = selected_date.replace(hour=0, minute=0, second=0, microsecond=0)
     telegram_id = message.from_user.id
 
     await message.message.answer(
@@ -90,9 +91,11 @@ async def service_appointment_2(
 
                 if flag:
                     selected_date = context_data.get("selected_date")
+                    print("service_appointment_2", "=" * 50, type(selected_date), selected_date)
+
                     await state.update_data(
                         {
-                            "selected_date": selected_date.replace(hour=int(input_text.split(":")[0]))
+                            "selected_hour": int(input_text.split(":")[0])
                         }
                     )
 
@@ -120,15 +123,15 @@ async def service_appointment_3(message: types.Message, state: FSMContext):
     """
     contact = message.contact
     context_data = await state.get_data()
-    selected_date = context_data.get("selected_date")
+    selected_date, selected_hour = context_data.get("selected_date"), context_data.get("selected_hour")
 
-    res = await transactions.check_date_time_appointment(selected_date)
+    res = await transactions.check_date_time_appointment(selected_date, selected_hour)
     if not res:
-        await transactions.set_date_time_appointment(contact, selected_date)
+        await transactions.set_date_time_appointment(contact, selected_date, selected_hour)
 
         sending_text = f"""Новая запись!!!
     Имя: {contact.last_name if contact.last_name else ""} {contact.first_name if contact.first_name else ""}
-    На {selected_date.day}-{selected_date.month}-{selected_date.year} в {selected_date.hour}:00.
+    На {selected_date.day}-{selected_date.month}-{selected_date.year} в {selected_hour}:00.
     Номер телефона: {contact.phone_number}
         """
 
@@ -140,7 +143,7 @@ async def service_appointment_3(message: types.Message, state: FSMContext):
             )
 
         await message.answer(
-            f"""Вы записаны на {selected_date.day}-{selected_date.month}-{selected_date.year} в {selected_date.hour}:00.
+            f"""Вы записаны на {selected_date.day}-{selected_date.month}-{selected_date.year} в {selected_hour}:00.
     Ваш номер {contact.phone_number} был получен.
     Вам перезвонят в течение получаса, для подтверждения записи.
     Спасибо, {contact.last_name if contact.last_name else ""} {contact.first_name if contact.first_name else ""}.

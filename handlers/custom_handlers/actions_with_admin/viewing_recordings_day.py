@@ -30,9 +30,12 @@ async def viewing_recordings_day_2(message: [types.CallbackQuery, types.Message]
     Функция viewing_recordings_day_2. Коллбэк с датой calendar_viewing_recordings_day запускает данную функцию.
     Функция выводит пользователей записанных на определённый день.
     """
+    print('='*70,message.data)
     selected_date = datetime.datetime.strptime(
         message.data.split("_")[4], "%Y-%m-%d %H:%M:%S.%f"
     )
+    selected_date = selected_date.date()
+    print('='*70,selected_date)
 
     res = await transactions.viewing_recordings_day_db(selected_date)
 

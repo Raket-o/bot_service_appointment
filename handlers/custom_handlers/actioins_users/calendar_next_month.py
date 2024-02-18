@@ -13,7 +13,10 @@ async def calendar_next_month(message: [types.CallbackQuery, types.Message]) -> 
     Подменяет текущую дату на начало следующего месяца и выводит календарь.
     Если пользователь админ, добавляет кнопу (Админ меню)."""
     telegram_id = message.from_user.id
-    date = datetime.datetime.now()
+    # date = datetime.datetime.now()
+    date = datetime.date.today()
+    # date = date.date()
+    print("calendar_next_month","="*50, type(date),date)
     date = date.replace(day=1, month=date.month + 1)
     callback_data = message.data.split("=")[1]
 

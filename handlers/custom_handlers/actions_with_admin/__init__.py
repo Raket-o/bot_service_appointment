@@ -1,6 +1,7 @@
 from . import (
     admin_menu,
     confirm_yes_no,
+    del_all_rec_day,
     del_user,
     reserve_day,
     search_client,

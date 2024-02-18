@@ -14,6 +14,7 @@ from handlers.custom_handlers.actions_with_admin.admin_menu import admin_menu
 from handlers.custom_handlers.actions_with_admin.confirm_yes_no import confirm_yes_no
 from handlers.custom_handlers.actions_with_admin.del_user import delete_user
 from handlers.custom_handlers.actions_with_admin.reserve_day import reserve_day_1, reserve_day_2, reserve_day_3
+from handlers.custom_handlers.actions_with_admin.del_all_rec_day import del_all_record_day_1, del_all_record_day_2, del_all_record_day_3
 from handlers.custom_handlers.actions_with_admin.search_client import search_client_1, search_client_2
 from handlers.custom_handlers.actions_with_admin.sending_messages import sending_message_1, sending_message_2, sending_message_3, sending_message_4
 from handlers.custom_handlers.actions_with_admin.un_block_user import unblocked_user
@@ -57,6 +58,10 @@ def register_routers(router: Router):
     router.callback_query.register(reserve_day_1, F.data == "reserve_day")
     router.callback_query.register(reserve_day_2, F.data.startswith("reserve_day_2"))
     router.callback_query.register(reserve_day_3, F.data.startswith("reserve_day="))
+
+    router.callback_query.register(del_all_record_day_1, F.data == "del_all_record_day")
+    router.callback_query.register(del_all_record_day_2, F.data.startswith("del_all_record_day_2"))
+    router.callback_query.register(del_all_record_day_3, F.data.startswith("del_all_record_day="))
 
     router.callback_query.register(search_client_1, F.data == "search_client")
     router.message.register(search_client_2, ServiceDateState.search_client)
