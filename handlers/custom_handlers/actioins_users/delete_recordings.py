@@ -1,5 +1,6 @@
 """Модуль обработки удаление записи."""
 import datetime
+
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 

@@ -1,28 +1,56 @@
 """Модуль регистрации хендлеров пользователя."""
-from aiogram import Router, F
-from aiogram.filters import Command, CommandStart, callback_data
-from aiogram.types import ContentType
-from aiogram.fsm.context import FSMContext
+from aiogram import F, Router
+from aiogram.filters import Command, CommandStart
 from aiogram.fsm.state import any_state
-from handlers.default_heandlers.start import start_command
-from handlers.custom_handlers.actioins_users.calendar_next_month import calendar_next_month
-from handlers.custom_handlers.actioins_users.delete_recordings import delete_recordings_1, delete_recordings_2
-from handlers.custom_handlers.actioins_users.service_appointment import service_appointment_1, service_appointment_2, service_appointment_3
+from aiogram.types import ContentType
+
+from handlers.custom_handlers.actioins_users.calendar_next_month import (
+    calendar_next_month,
+)
+from handlers.custom_handlers.actioins_users.delete_recordings import (
+    delete_recordings_1,
+    delete_recordings_2,
+)
+from handlers.custom_handlers.actioins_users.service_appointment import (
+    service_appointment_1,
+    service_appointment_2,
+    service_appointment_3,
+)
 from handlers.custom_handlers.actioins_users.service_cancel import service_cancel
 from handlers.custom_handlers.actioins_users.view_recordings import view_recordings
 from handlers.custom_handlers.actions_with_admin.admin_menu import admin_menu
 from handlers.custom_handlers.actions_with_admin.confirm_yes_no import confirm_yes_no
+from handlers.custom_handlers.actions_with_admin.del_all_rec_day import (
+    del_all_record_day_1,
+    del_all_record_day_2,
+    del_all_record_day_3,
+)
 from handlers.custom_handlers.actions_with_admin.del_user import delete_user
-from handlers.custom_handlers.actions_with_admin.reserve_day import reserve_day_1, reserve_day_2, reserve_day_3
-from handlers.custom_handlers.actions_with_admin.del_all_rec_day import del_all_record_day_1, del_all_record_day_2, del_all_record_day_3
-from handlers.custom_handlers.actions_with_admin.search_client import search_client_1, search_client_2
-from handlers.custom_handlers.actions_with_admin.sending_messages import sending_message_1, sending_message_2, sending_message_3, sending_message_4
+from handlers.custom_handlers.actions_with_admin.reserve_day import (
+    reserve_day_1,
+    reserve_day_2,
+    reserve_day_3,
+)
+from handlers.custom_handlers.actions_with_admin.search_client import (
+    search_client_1,
+    search_client_2,
+)
+from handlers.custom_handlers.actions_with_admin.sending_messages import (
+    sending_message_1,
+    sending_message_2,
+    sending_message_3,
+    sending_message_4,
+)
 from handlers.custom_handlers.actions_with_admin.un_block_user import unblocked_user
 from handlers.custom_handlers.actions_with_admin.view_clients import view_clients
-from handlers.custom_handlers.actions_with_admin.viewing_recordings_day import viewing_recordings_day_1, viewing_recordings_day_2
+from handlers.custom_handlers.actions_with_admin.view_rec import view_rec
+from handlers.custom_handlers.actions_with_admin.viewing_recordings_day import (
+    viewing_recordings_day_1,
+    viewing_recordings_day_2,
+)
 from handlers.custom_handlers.actions_with_admin.weekend import weekend
 from handlers.default_heandlers.cancel import cancel_handler
-from handlers.custom_handlers.actions_with_admin.view_rec import view_rec
+from handlers.default_heandlers.start import start_command
 from states.states import ServiceDateState
 
 

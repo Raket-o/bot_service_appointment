@@ -2,8 +2,8 @@
 import asyncio
 import datetime
 
-from database import transactions
 from config_data.config import LOCAL_UTC, REMINDER_TIME
+from database import transactions
 
 
 async def restarting_services() -> None:

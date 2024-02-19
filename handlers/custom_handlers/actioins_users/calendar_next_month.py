@@ -2,7 +2,6 @@
 import datetime
 
 from aiogram import types
-from aiogram.types import ReplyKeyboardRemove
 
 from config_data.config import ADMINS_TELEGRAM_ID
 from keyboards.inline.calendar_v1 import calendar_buttons

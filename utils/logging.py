@@ -2,9 +2,7 @@
 import logging
 import os
 import sys
-
 from logging.handlers import TimedRotatingFileHandler
-
 
 __DIR_LOGS = "logs"
 

@@ -17,5 +17,3 @@ def get_list_weekends(start_day: int, end_day: int, date: datetime) -> tuple[int
     return tuple((date + datetime.timedelta(i)).day
             for i in range(1, delta + 1)
             if datetime.datetime.isoweekday(date + datetime.timedelta(i)) in num_day)
-
-

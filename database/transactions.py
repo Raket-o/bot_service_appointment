@@ -1,8 +1,8 @@
 """Модуль работы с базой данных."""
 import datetime
-import sqlite3
-from sqlalchemy import func, text, select
-from typing import Any, List, Set
+from typing import Any
+
+from sqlalchemy import func, select, text
 
 from database.connect import Base, engine, session
 from database.models import RecordDate, UserInfo
@@ -137,14 +137,6 @@ async def view_record(telegram_id: int) -> list[Any]:
     """Функция view_record. Возвращает все записи пользователя."""
     res = await session.execute(select(RecordDate.record_date, RecordDate.hour).where(RecordDate.telegram_id == telegram_id).order_by(RecordDate.record_date, RecordDate.hour))
     return res.all()
-
-
-# async def view_client_records(telegram_id: int) -> list[Any]:
-#     """Функция view_client_records. Возвращает все записи пользователя."""
-#     print("========view_client_records========" * 10)
-#
-#     res = await session.execute(select(RecordDate.record_date, RecordDate.hour).where(RecordDate.telegram_id == telegram_id).order_by(RecordDate.hour))
-#     return res.all()
 
 
 async def block_unblock_user(telegram_id: int, action: str) -> None:

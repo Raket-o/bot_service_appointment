@@ -3,8 +3,6 @@ import calendar
 import datetime
 
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-
-from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from utils.misc.weekend_reservations import get_list_weekends

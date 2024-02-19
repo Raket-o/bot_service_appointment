@@ -1,5 +1,4 @@
 """Модуль сброса состояние пользователя."""
-from aiogram import types
 import logging
 
 from aiogram.fsm.context import FSMContext

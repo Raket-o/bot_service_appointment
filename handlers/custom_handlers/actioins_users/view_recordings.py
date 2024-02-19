@@ -1,6 +1,4 @@
 """Модуль обработки просмотра записей."""
-import datetime
-
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 
@@ -26,4 +24,3 @@ async def view_recordings(message: types.Message, state: FSMContext):
     kb = list_button(for_btn)
     await message.message.answer("Удалить запись?", reply_markup=kb)
     await state.set_state(ServiceDateState.service_delete)
-

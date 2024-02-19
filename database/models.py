@@ -1,11 +1,9 @@
 """Модуль моделей с баз данных."""
-import datetime
-
-from sqlalchemy import Column, create_engine, ForeignKey
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy import Column, ForeignKey
+from sqlalchemy.orm import backref, relationship
 from sqlalchemy.types import Boolean, Date, Integer, String
 
-from database.connect import Base, engine, session
+from database.connect import Base
 
 
 class UserInfo(Base):

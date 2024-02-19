@@ -1,11 +1,10 @@
 """Модуль милдваре. Запрещает активность заблокированному пользователю."""
 import logging
-
-from aiogram import BaseMiddleware
-from aiogram.types import Message, CallbackQuery
 from typing import Any, Awaitable, Callable, Union
 
-from config_data.config import ADMINS_TELEGRAM_ID
+from aiogram import BaseMiddleware
+from aiogram.types import CallbackQuery, Message
+
 from database import transactions
 
 

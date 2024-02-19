@@ -1,14 +1,11 @@
 """ Модуль запуска телеграмм бота."""
 import asyncio
-import logging
-import sys
-from aiogram import Bot, Dispatcher
-from aiogram.enums import ParseMode
 
-from config_data.config import BOT_TOKEN
+from aiogram import Bot, Dispatcher
+
 from database.transactions import init_db
 from handlers.routers import register_routers
-from loader import on_shutdown, start_up, bot, dp
+from loader import bot, dp, on_shutdown, start_up
 from middlewares.who_here import WhoHereMiddleware
 from utils.restart_services import restarting_services
 

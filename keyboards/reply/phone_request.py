@@ -1,5 +1,5 @@
 """Модуль запроса номера телефона пользователя."""
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
+from aiogram.types import ReplyKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 

@@ -4,7 +4,6 @@ import datetime
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 
-from config_data import config
 from database import transactions
 from keyboards.inline.back_admin_menu import back_admin_menu_button
 from keyboards.inline.calendar_v1 import calendar_buttons
