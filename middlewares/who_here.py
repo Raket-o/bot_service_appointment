@@ -1,4 +1,4 @@
-"""Модуль милдваре. Запрещает активность заблокированному пользователю"""
+"""Модуль милдваре. Запрещает активность заблокированному пользователю."""
 import logging
 
 from aiogram import BaseMiddleware
@@ -32,4 +32,3 @@ class WhoHereMiddleware(BaseMiddleware):
                 return await handler(event, data)
         else:
             return await handler(event, data)
-

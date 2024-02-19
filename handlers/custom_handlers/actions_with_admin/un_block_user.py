@@ -1,4 +1,4 @@
-"""Модуль разбловировки\блокировки пользователя"""
+"""Модуль разбловировки\блокировки пользователя."""
 from aiogram import types
 
 from database import transactions

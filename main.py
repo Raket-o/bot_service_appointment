@@ -1,4 +1,4 @@
-""" Модуль запуска телеграмм бота"""
+""" Модуль запуска телеграмм бота."""
 import asyncio
 import logging
 import sys
@@ -14,6 +14,7 @@ from utils.restart_services import restarting_services
 
 
 async def main(bot: Bot, dp: Dispatcher) -> None:
+    """Функция main. Запускает бота."""
     dp.startup.register(start_up)
     dp.shutdown.register(on_shutdown)
 

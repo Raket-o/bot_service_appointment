@@ -11,8 +11,6 @@ from keyboards.inline.confirm_yes_no import conf_yes_no_button
 from loader import bot
 from states.states import ServiceDateState
 
-from database.transactions import datetime_trans_str
-
 
 async def sending_message_1(message: [types.CallbackQuery, types.Message]) -> None:
     """

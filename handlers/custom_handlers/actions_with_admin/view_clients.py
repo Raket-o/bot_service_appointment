@@ -1,4 +1,4 @@
-"""Модуль вывода всех пользователей"""
+"""Модуль вывода всех пользователей."""
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 

@@ -1,4 +1,4 @@
-""" Модуль команды /start"""
+""" Модуль команды /start."""
 import datetime
 import logging
 

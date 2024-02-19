@@ -1,11 +1,11 @@
-"""Модуль создания клавиатуры подтверждения (Да/Нет)"""
+"""Модуль создания клавиатуры подтверждения (Да/Нет)."""
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 
 def conf_yes_no_button(callback_yes: str, callback_no: str) -> InlineKeyboardMarkup:
     """
-    Функция создания клавиатуры подтверждения (Да/Нет)
+    Функция создания клавиатуры подтверждения (Да/Нет).
     :return: InlineKeyboardMarkup
     """
     keyboard_builder = InlineKeyboardBuilder()

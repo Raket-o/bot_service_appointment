@@ -1,11 +1,11 @@
-"""Модуль создания клавиатуры"""
+"""Модуль создания клавиатуры."""
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 
 def admin_buttons() -> InlineKeyboardMarkup:
     """
-    Функция создания клавиатуры для главного админ меню
+    Функция создания клавиатуры для главного админ меню.
     :return: InlineKeyboardMarkup
     """
     keyboard_builder = InlineKeyboardBuilder()

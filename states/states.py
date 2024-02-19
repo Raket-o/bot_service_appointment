@@ -1,9 +1,9 @@
-"""Модуль хранения данных (состояний) пользователя"""
+"""Модуль хранения данных (состояний) пользователя."""
 from aiogram.fsm.state import State, StatesGroup
 
 
 class ServiceDateState(StatesGroup):
-    """Класс ServiceDateState. Хранит информацию и данные вводимые пользователем"""
+    """Класс ServiceDateState. Хранит информацию и данные вводимые пользователем."""
 
     service_date = State()
     service_time = State()

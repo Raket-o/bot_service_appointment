@@ -1,4 +1,4 @@
-"""Модуль генерации клавиатуры. Имя берётся из входящего списка"""
+"""Модуль генерации клавиатуры. Имя берётся из входящего списка."""
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 

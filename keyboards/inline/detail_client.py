@@ -1,11 +1,11 @@
-"""Модуль создания клавиатуры (работа с пользователем)"""
+"""Модуль создания клавиатуры (работа с пользователем)."""
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 
 def details_client_buttons(telegram_id: int, user_blocked: int) -> InlineKeyboardMarkup:
     """
-    Функция создания клавиатуры работа с пользователем
+    Функция создания клавиатуры работа с пользователем.
     :return: InlineKeyboardMarkup
     """
     keyboard_builder = InlineKeyboardBuilder()

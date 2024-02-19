@@ -1,4 +1,4 @@
-"""Модуль поиска клиентов по имя и номеру телефона"""
+"""Модуль поиска клиентов по имя и номеру телефона."""
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 

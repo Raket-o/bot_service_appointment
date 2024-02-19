@@ -1,4 +1,4 @@
-"""Модуль регистрации хендлеров пользователя"""
+"""Модуль регистрации хендлеров пользователя."""
 from aiogram import Router, F
 from aiogram.filters import Command, CommandStart, callback_data
 from aiogram.types import ContentType

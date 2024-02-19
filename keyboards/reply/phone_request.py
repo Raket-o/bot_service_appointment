@@ -1,4 +1,4 @@
-"""Модуль запроса номера телефона пользователя"""
+"""Модуль запроса номера телефона пользователя."""
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 

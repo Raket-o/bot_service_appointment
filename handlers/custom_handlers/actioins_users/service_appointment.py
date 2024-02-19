@@ -26,7 +26,6 @@ async def service_appointment_1(message: types.Message, state: FSMContext):
         message.data.split("_")[2], "%Y-%m-%d"
     )
     selected_date = selected_date.date()
-    # selected_date = selected_date.replace(hour=0, minute=0, second=0, microsecond=0)
     telegram_id = message.from_user.id
 
     await message.message.answer(
@@ -90,9 +89,6 @@ async def service_appointment_2(
                         flag = True
 
                 if flag:
-                    selected_date = context_data.get("selected_date")
-                    print("service_appointment_2", "=" * 50, type(selected_date), selected_date)
-
                     await state.update_data(
                         {
                             "selected_hour": int(input_text.split(":")[0])
