@@ -195,3 +195,11 @@ async def viewing_recordings_day_db(date: datetime) -> list[Any]:
            join(UserInfo, UserInfo.telegramm_id==RecordDate.telegram_id).
            where(RecordDate.record_date == date).order_by(RecordDate.hour)))
     return res.all()
+
+
+async def get_info_user(date: datetime, hour: int) -> UserInfo:
+    """Функция get_info_user. Возвращает ид пользователя."""
+    res = await (session.execute(select(RecordDate.telegram_id).
+           join(UserInfo, UserInfo.telegramm_id==RecordDate.telegram_id).
+           where(RecordDate.record_date == date, RecordDate.hour == hour)))
+    return res.one_or_none()

@@ -6,6 +6,7 @@ from aiogram import types
 from database import transactions
 from keyboards.inline.back_admin_menu import back_admin_menu_button
 from keyboards.inline.calendar_v1 import calendar_buttons
+from keyboards.inline.rec_del import rec_del_button
 
 
 async def viewing_recordings_day_1(message: [types.CallbackQuery, types.Message]):
@@ -39,11 +40,14 @@ async def viewing_recordings_day_2(message: [types.CallbackQuery, types.Message]
 
     if res:
         for user in res:
+            callback_rec_del_button = f"confirm_yes_no=rec_del_with_day={selected_date}={user[2]}"
+            kb_rec_del = rec_del_button(callback_rec_del_button)
             await message.message.answer(
                 f"""Клиент: {user[0]}
         Телефон: {user[1]}
         Записан на {user[2]} часов
-        """
+        """,
+                reply_markup=kb_rec_del
             )
     else:
         await message.message.answer("На этот день нет записей")

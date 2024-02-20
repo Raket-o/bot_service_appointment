@@ -25,6 +25,7 @@ from handlers.custom_handlers.actions_with_admin.del_all_rec_day import (
     del_all_record_day_2,
     del_all_record_day_3,
 )
+from handlers.custom_handlers.actions_with_admin.del_rec_day import del_record_day_1
 from handlers.custom_handlers.actions_with_admin.del_user import delete_user
 from handlers.custom_handlers.actions_with_admin.reserve_day import (
     reserve_day_1,
@@ -90,6 +91,8 @@ def register_routers(router: Router):
     router.callback_query.register(del_all_record_day_1, F.data == "del_all_record_day")
     router.callback_query.register(del_all_record_day_2, F.data.startswith("del_all_record_day_2"))
     router.callback_query.register(del_all_record_day_3, F.data.startswith("del_all_record_day="))
+
+    router.callback_query.register(del_record_day_1, F.data.startswith("rec_del_with_day"))
 
     router.callback_query.register(search_client_1, F.data == "search_client")
     router.message.register(search_client_2, ServiceDateState.search_client)
