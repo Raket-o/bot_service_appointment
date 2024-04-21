@@ -4,6 +4,6 @@ version: "2"
 services:
   app:
     build: .
-    container_name: bot_class_events
+    container_name: bot_service_appointment
     volumes: ['./database:/app/database/', './logs/:/app/logs/']
     command: ["python", "main.py"]
