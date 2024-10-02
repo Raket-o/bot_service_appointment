@@ -8,6 +8,9 @@ from aiogram.types import ReplyKeyboardRemove
 from config_data.config import ADMINS_TELEGRAM_ID, START_MESSAGE
 from database import transactions
 from keyboards.inline.calendar_v1 import calendar_buttons
+from utils.calendar import InternalCalendar
+
+from states.states import ServiceDateState
 
 start_logger = logging.getLogger(__name__)
 
@@ -31,10 +34,16 @@ async def start_command(message: [types.CallbackQuery, types.Message]) -> None:
 
     await transactions.update_visit_date(telegram_id)
 
-    current_date = datetime.datetime.now()
-    current_date = current_date.date()
+    # current_date = datetime.datetime.now()
+    # current_date = current_date.date()
 
-    kb = await calendar_buttons(current_date, callback_data)
+    # internal_calendar = InternalCalendar()
+    current_date = internal_calendar.calen_date
+    # internal_calendar = Form.calen_1
+    current_date = internal_calendar.calen_date
+
+
+    kb = await calendar_buttons(current_date, callback_data, internal_calendar.is_previous_month())
     kb.button(text="Мои записи", callback_data=f"view_recordings={telegram_id}")
 
     if telegram_id in ADMINS_TELEGRAM_ID:

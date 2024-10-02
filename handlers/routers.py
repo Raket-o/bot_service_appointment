@@ -4,8 +4,8 @@ from aiogram.filters import Command, CommandStart
 from aiogram.fsm.state import any_state
 from aiogram.types import ContentType
 
-from handlers.custom_handlers.actioins_users.calendar_next_month import (
-    calendar_next_month,
+from handlers.custom_handlers.actioins_users.calendar_change_month import (
+    calendar_change_month,
 )
 from handlers.custom_handlers.actioins_users.delete_recordings import (
     delete_recordings_1,
@@ -65,7 +65,7 @@ def register_routers(router: Router):
     router.message.register(cancel_handler, Command('cancel'))
     router.message.register(cancel_handler, F.text.casefold() == "cancel")
 
-    router.callback_query.register(calendar_next_month, F.data.startswith("calendar_next_month="))
+    router.callback_query.register(calendar_change_month, F.data.startswith("calendar_change_month="))
 
     router.message.register(delete_recordings_1, ServiceDateState.service_delete)
     router.message.register(delete_recordings_2, ServiceDateState.service_delete_conf)

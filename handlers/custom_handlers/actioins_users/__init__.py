@@ -1,5 +1,5 @@
 from . import (
-    calendar_next_month,
+    calendar_change_month,
     delete_recordings,
     service_appointment,
     service_cancel,
