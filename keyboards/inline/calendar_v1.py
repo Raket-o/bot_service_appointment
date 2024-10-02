@@ -24,17 +24,26 @@ NAMES_MONTH = {
 }
 
 
-async def calendar_buttons(date: datetime, action: str, is_previous_month) -> InlineKeyboardBuilder:
+async def calendar_buttons(date: datetime, action: str) -> InlineKeyboardBuilder:
     """
     Функция создания клавиатуры календаря.
     :return: InlineKeyboardMarkup
     """
     keyboard_builder = InlineKeyboardBuilder()
 
+    if action == "del_all_record_day_2":
+        action = "del_all_record_day_2="
+
+    current_datetime = datetime.datetime.now()
+    year_month = f"{date.year} {NAMES_MONTH[date.month]}"
+
     text_btn = (
-        ("🎉🎁🎉", "ignore") if is_previous_month else ("<--", f"calendar_change_month=down={action}"),
-        (f"{date.year} {NAMES_MONTH[date.month]}", "ignore"),
-        ("-->", f"calendar_change_month=up={action}"),
+        ("🎉🎁🎉", "ignore")
+        if date.month == current_datetime.month and date.year == current_datetime.year
+        else ("<--", f"calendar_change_month=down={date}={action}"),
+
+        (year_month, "ignore"),
+        ("-->", f"calendar_change_month=up={date}={action}"),
     )
 
     for text in text_btn:

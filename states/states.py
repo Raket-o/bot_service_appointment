@@ -1,8 +1,6 @@
 """Модуль хранения данных (состояний) пользователя."""
 from aiogram.fsm.state import State, StatesGroup
 
-from utils.calendar import InternalCalendar
-
 
 class ServiceDateState(StatesGroup):
     """Класс ServiceDateState. Хранит информацию и данные вводимые пользователем."""

@@ -15,7 +15,8 @@ async def viewing_recordings_day_1(message: [types.CallbackQuery, types.Message]
     Запрашивает дату для выводи записей пользователя.
     """
     current_date = datetime.datetime.now()
-    callback_data = "calendar_viewing_recordings_day"
+    current_date = current_date.date()
+    callback_data = "view_recs_day"
     telegram_id = message.from_user.id
 
     kb = await calendar_buttons(current_date, callback_data)
@@ -23,7 +24,7 @@ async def viewing_recordings_day_1(message: [types.CallbackQuery, types.Message]
     kb.button(text="Админ меню", callback_data="admin_menu")
     kb.adjust(3, 7)
     kb = kb.as_markup()
-    await message.message.answer("Введите дату, формат ДД-ММ-ГГГГ", reply_markup=kb)
+    await message.message.answer("Выберите дату:", reply_markup=kb)
 
 
 async def viewing_recordings_day_2(message: [types.CallbackQuery, types.Message]):
@@ -32,7 +33,7 @@ async def viewing_recordings_day_2(message: [types.CallbackQuery, types.Message]
     Функция выводит пользователей записанных на определённый день.
     """
     selected_date = datetime.datetime.strptime(
-        message.data.split("_")[4], "%Y-%m-%d %H:%M:%S.%f"
+        message.data.split("_")[3], "%Y-%m-%d"
     )
     selected_date = selected_date.date()
 

@@ -107,7 +107,7 @@ def register_routers(router: Router):
     router.callback_query.register(view_clients, F.data == "view_clients")
 
     router.callback_query.register(viewing_recordings_day_1, F.data == "viewing_recordings_day")
-    router.callback_query.register(viewing_recordings_day_2, F.data.startswith("calendar_viewing_recordings_day"))
+    router.callback_query.register(viewing_recordings_day_2, F.data.startswith("view_recs_day"))
 
     router.callback_query.register(weekend, F.data == "weekend")
 

@@ -33,6 +33,7 @@ async def del_all_record_day_2(message: [types.CallbackQuery, types.Message], st
     Функция del_all_record_day_2. Коллбэк с датой del_all_record_day_2 запускает данную функцию.
     Ждёт подтверждения на резерв дня.
     """
+    print("-+"*50,message.data.split())
     date = datetime.datetime.strptime(
         message.data.split("=")[1], "_%Y-%m-%d"
     )
