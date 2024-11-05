@@ -2,36 +2,36 @@
 import datetime
 
 from aiogram import types
+from aiogram.fsm.context import FSMContext
 
 from config_data.config import ADMINS_TELEGRAM_ID
 from keyboards.inline.calendar_v1 import calendar_buttons
+from utils.calendar import InternalCalendar
 
 
-async def calendar_change_month(message: [types.CallbackQuery, types.Message]) -> None:
+async def calendar_change_month(message: [types.CallbackQuery, types.Message], state: FSMContext) -> None:
     """Функция calendar_change_month. Обработка коллбэк calendar_change_month=.
     Подменяет текущую дату на начало следующего месяца и выводит календарь.
     Если пользователь админ, добавляет кнопу (Админ меню)."""
-    telegram_id = message.from_user.id
-    date = message.data.split("=")[2]
-    date = datetime.datetime.strptime(date, "%Y-%m-%d")
+    context_data = await state.get_data()
+
+    if not context_data:
+        await state.update_data({"user_calen": InternalCalendar(message.from_user.id)})
+        context_data = await state.get_data()
+
+    user_calen: InternalCalendar = context_data.get("user_calen")
 
     if message.data.split("=")[1] == "down":
-        try:
-            date = date.replace(date.year, date.month - 1, 1)
-        except ValueError:
-            date = date.replace(date.year - 1, 12, 1)
+        date = await user_calen.pre_month()
     else:
-        try:
-            date = date.replace(date.year, date.month + 1, 1)
-        except ValueError:
-            date = date.replace(date.year + 1, 1, 1)
+        date = await user_calen.next_month()
 
     callback_data = message.data.split("=")[3]
 
-    kb = await calendar_buttons(date.date(), callback_data)
-    kb.button(text="Мои записи", callback_data=f"view_recordings={telegram_id}")
+    kb = await calendar_buttons(date, callback_data)
+    kb.button(text="Мои записи", callback_data=f"view_recordings={user_calen.telegram_id}")
 
-    if telegram_id in ADMINS_TELEGRAM_ID:
+    if user_calen.telegram_id in ADMINS_TELEGRAM_ID:
         kb.button(text="Админ меню", callback_data="admin_menu")
 
     kb.adjust(3, 7)

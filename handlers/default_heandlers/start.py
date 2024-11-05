@@ -3,17 +3,18 @@ import datetime
 import logging
 
 from aiogram import types
+from aiogram.fsm.context import FSMContext
 from aiogram.types import ReplyKeyboardRemove
 
 from config_data.config import ADMINS_TELEGRAM_ID, START_MESSAGE
 from database import transactions
 from keyboards.inline.calendar_v1 import calendar_buttons
-
+from utils.calendar import InternalCalendar
 
 start_logger = logging.getLogger(__name__)
 
 
-async def start_command(message: [types.CallbackQuery, types.Message]) -> None:
+async def start_command(message: [types.CallbackQuery, types.Message], state: FSMContext = None) -> None:
     """
     Вывод тест START_MESSAGE и календарь.
     Если пользователя админ, то добавляет кнопки админ меню
@@ -32,8 +33,9 @@ async def start_command(message: [types.CallbackQuery, types.Message]) -> None:
 
     await transactions.update_visit_date(telegram_id)
 
-    current_datetime = datetime.datetime.now()
-    current_date = current_datetime.date()
+    user_calen = InternalCalendar(telegram_id)
+    await state.update_data({"user_calen": user_calen})
+    current_date = await user_calen.current_date()
 
     kb = await calendar_buttons(current_date, callback_data)
     kb.button(text="Мои записи", callback_data=f"view_recordings={telegram_id}")

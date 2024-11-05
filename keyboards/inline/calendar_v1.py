@@ -24,7 +24,7 @@ NAMES_MONTH = {
 }
 
 
-async def calendar_buttons(date: datetime, action: str) -> InlineKeyboardBuilder:
+async def calendar_buttons(date: datetime, action: str, user=None) -> InlineKeyboardBuilder:
     """
     Функция создания клавиатуры календаря.
     :return: InlineKeyboardMarkup
@@ -45,6 +45,11 @@ async def calendar_buttons(date: datetime, action: str) -> InlineKeyboardBuilder
         (year_month, "ignore"),
         ("-->", f"calendar_change_month=up={date}={action}"),
     )
+
+    try:
+        print(user.next_month())
+    except:
+        pass
 
     for text in text_btn:
         keyboard_builder.button(text=text[0], callback_data=text[1])

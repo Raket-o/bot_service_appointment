@@ -13,4 +13,4 @@ async def service_cancel(
     input_text = message.text
     if input_text == "Вернуться":
         await state.clear()
-        await start_command(message)
+        await start_command(message, state)

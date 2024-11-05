@@ -17,7 +17,7 @@ async def delete_recordings_1(
     input_text = message.text
     if "Вернуться" in input_text or "Записей ещё нет" in input_text:
         await state.clear()
-        await start_command(message)
+        await start_command(message, state)
     else:
         split_text = input_text.split()
         hour = split_text[2].split(":")[0]

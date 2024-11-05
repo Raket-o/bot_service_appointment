@@ -74,7 +74,7 @@ async def service_appointment_2(
         input_text = message.text
         if "Выбрать" in input_text:
             await state.clear()
-            await start_command(message)
+            await start_command(message, state)
         else:
             context_data = await state.get_data()
             if (
@@ -151,4 +151,4 @@ async def service_appointment_3(message: types.Message, state: FSMContext):
         )
 
     await state.clear()
-    await start_command(message)
+    await start_command(message, state)
