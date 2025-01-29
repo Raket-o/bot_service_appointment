@@ -18,10 +18,14 @@ class InternalCalendar:
         return self.internal_date
 
     async def pre_month(self) -> datetime.date:
+        day = 1
         try:
-            self.internal_date = self.internal_date.replace(self.internal_date.year, self.internal_date.month - 1, 1)
+            if (self.internal_date.month == CURRENT_DATETIME.date().month + 1 and
+                    self.internal_date.year == CURRENT_DATETIME.date().year):
+                day = CURRENT_DATETIME.date().day
+            self.internal_date = self.internal_date.replace(self.internal_date.year, self.internal_date.month - 1, day)
         except ValueError:
-            self.internal_date = self.internal_date.replace(self.internal_date.year - 1, 12, 1)
+            self.internal_date = self.internal_date.replace(self.internal_date.year - 1, 12, day)
         return self.internal_date
 
     async def is_pre_month(self) -> bool:

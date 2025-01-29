@@ -16,5 +16,3 @@ ADMINS_TELEGRAM_ID = [int(i) for i in os.getenv("ADMINS_TELEGRAM_ID").split()]
 WEEKENDS = [i.capitalize() for i in os.getenv("WEEKENDS").split()]
 LOCAL_UTC = os.getenv("LOCAL_UTC")
 REMINDER_TIME = os.getenv("REMINDER_TIME")
-
-DEFAULT_COMMANDS = ("start", "Запустить бота")

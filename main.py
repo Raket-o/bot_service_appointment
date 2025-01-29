@@ -7,11 +7,14 @@ from database.transactions import init_db
 from handlers.routers import register_routers
 from loader import bot, dp, on_shutdown, start_up
 from middlewares.who_here import WhoHereMiddleware
+from utils.commands import set_default_commands
 from utils.restart_services import restarting_services
 
 
 async def main(bot: Bot, dp: Dispatcher) -> None:
     """Функция main. Запускает бота."""
+    await set_default_commands(bot)
+
     dp.startup.register(start_up)
     dp.shutdown.register(on_shutdown)
 

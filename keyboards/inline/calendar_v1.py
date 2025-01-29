@@ -24,7 +24,7 @@ NAMES_MONTH = {
 }
 
 
-async def calendar_buttons(date: datetime, action: str, user=None) -> InlineKeyboardBuilder:
+async def calendar_buttons(date: datetime, action: str) -> InlineKeyboardBuilder:
     """
     Функция создания клавиатуры календаря.
     :return: InlineKeyboardMarkup
@@ -32,7 +32,7 @@ async def calendar_buttons(date: datetime, action: str, user=None) -> InlineKeyb
     keyboard_builder = InlineKeyboardBuilder()
 
     if action == "del_all_record_day_2":
-        action = "del_all_record_day_2="
+        action += "="
 
     current_datetime = datetime.datetime.now()
     year_month = f"{date.year} {NAMES_MONTH[date.month]}"
@@ -46,11 +46,6 @@ async def calendar_buttons(date: datetime, action: str, user=None) -> InlineKeyb
         ("-->", f"calendar_change_month=up={date}={action}"),
     )
 
-    try:
-        print(user.next_month())
-    except:
-        pass
-
     for text in text_btn:
         keyboard_builder.button(text=text[0], callback_data=text[1])
 
@@ -59,20 +54,24 @@ async def calendar_buttons(date: datetime, action: str, user=None) -> InlineKeyb
 
     obj = calendar.Calendar()
 
-    day_in_month = [num_day for num_day in obj.itermonthdays(date.year, date.month) if num_day >= date.day]
-    list_weekends = get_list_weekends(start_day=day_in_month[0], end_day=day_in_month[-1], date=date)
+    list_weekends = await get_list_weekends()
 
     btns = []
     for _ in range(date.weekday()):
         btns.append(InlineKeyboardButton(text=" ", callback_data="ignore"))
 
+    day_ind = 1
     for day_num in obj.itermonthdays(date.year, date.month):
         if day_num >= date.day:
-            if day_num in list_weekends and action == "calendar_day":
-                btns.append(InlineKeyboardButton(text=str(day_num), callback_data="weekend"))
+            if day_ind in list_weekends and action == "calendar_day":
+                btns.append(InlineKeyboardButton(text="вых", callback_data="weekend"))
             else:
                 callback_data = f"{action}_{date.replace(day=day_num)}"
                 btns.append(InlineKeyboardButton(text=str(day_num), callback_data=callback_data))
+
+        if day_ind == 7:
+            day_ind = 0
+        day_ind += 1
 
     keyboard_builder.row(*btns, width=7)
 
