@@ -5,7 +5,7 @@ import datetime
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from utils.misc.weekend_reservations import get_list_weekends
+from utils.misc.weekend_reservations import ListWeekends
 
 NAMES_DAYS = ("Пн", "Вт", "Ср", "Чт", "Пт", "Суб", "Вск")
 NAMES_MONTH = {
@@ -54,11 +54,10 @@ async def calendar_buttons(date: datetime, action: str) -> InlineKeyboardBuilder
 
     obj = calendar.Calendar()
 
-    list_weekends = await get_list_weekends()
+    weekends_obj = ListWeekends()
+    list_weekends = await weekends_obj.get_list_weekends()
 
-    btns = []
-    for _ in range(date.weekday()):
-        btns.append(InlineKeyboardButton(text=" ", callback_data="ignore"))
+    btns = [InlineKeyboardButton(text=" ", callback_data="ignore") for _ in range(date.weekday())]
 
     day_ind = 1
     for day_num in obj.itermonthdays(date.year, date.month):

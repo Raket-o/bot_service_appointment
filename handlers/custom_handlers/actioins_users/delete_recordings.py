@@ -55,4 +55,4 @@ async def delete_recordings_2(
         await transactions.del_record(date, hour)
 
         await state.clear()
-        await start_command(message)
+        await start_command(message, state)
