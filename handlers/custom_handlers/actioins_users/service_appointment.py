@@ -13,6 +13,7 @@ from keyboards.reply.list_button import list_button
 from keyboards.reply.phone_request import contact_button
 from loader import bot
 from states.states import ServiceDateState
+from utils.misc.region_datetime import region_current_datetime
 
 BEGINNING_WORKING_DAY = config.BEGINNING_WORKING_DAY
 END_WORKING_DAY = config.END_WORKING_DAY
@@ -32,18 +33,16 @@ async def service_appointment_1(message: types.Message, state: FSMContext):
 
     res = await transactions.get_date_time_appointment(selected_date)
 
+    region_time: datetime = await region_current_datetime()
+    current_hour = region_time.hour
+    beginning_working_day = BEGINNING_WORKING_DAY
 
-    # from utils.misc.region_datetime import region_current_datetime
-    # region_time = await region_current_datetime()
-    # current_hour = region_time.hour
-    # print(current_hour)
-    # print(region_time)
-
+    if current_hour > BEGINNING_WORKING_DAY and selected_date == region_time.date():
+        beginning_working_day = current_hour
 
     if res:
         working_hours = [
-            [i, 0] for i in range(BEGINNING_WORKING_DAY, END_WORKING_DAY)
-            # [i, 0] for i in range(current_hour, END_WORKING_DAY)
+            [i, 0] for i in range(beginning_working_day, END_WORKING_DAY)
         ]
         for i in res:
             for j in working_hours:
@@ -54,8 +53,7 @@ async def service_appointment_1(message: types.Message, state: FSMContext):
                         j[1] = f"{j[0]}:00"
     else:
         working_hours = [
-            [i, f"{i}:00"] for i in range(BEGINNING_WORKING_DAY, END_WORKING_DAY)
-            # [i, f"{i}:00"] for i in range(current_hour, END_WORKING_DAY)
+            [i, f"{i}:00"] for i in range(beginning_working_day, END_WORKING_DAY)
         ]
 
     working_hours.append([0, "Выбрать другую дату"])
