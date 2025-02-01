@@ -32,9 +32,18 @@ async def service_appointment_1(message: types.Message, state: FSMContext):
 
     res = await transactions.get_date_time_appointment(selected_date)
 
+
+    # from utils.misc.region_datetime import region_current_datetime
+    # region_time = await region_current_datetime()
+    # current_hour = region_time.hour
+    # print(current_hour)
+    # print(region_time)
+
+
     if res:
         working_hours = [
             [i, 0] for i in range(BEGINNING_WORKING_DAY, END_WORKING_DAY)
+            # [i, 0] for i in range(current_hour, END_WORKING_DAY)
         ]
         for i in res:
             for j in working_hours:
@@ -46,6 +55,7 @@ async def service_appointment_1(message: types.Message, state: FSMContext):
     else:
         working_hours = [
             [i, f"{i}:00"] for i in range(BEGINNING_WORKING_DAY, END_WORKING_DAY)
+            # [i, f"{i}:00"] for i in range(current_hour, END_WORKING_DAY)
         ]
 
     working_hours.append([0, "Выбрать другую дату"])

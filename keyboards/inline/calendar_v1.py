@@ -57,7 +57,7 @@ async def calendar_buttons(date: datetime, action: str) -> InlineKeyboardBuilder
     weekends_obj = ListWeekends()
     list_weekends = await weekends_obj.get_list_weekends()
 
-    btns = [InlineKeyboardButton(text=" ", callback_data="ignore") for _ in range(date.weekday())]
+    btns = [InlineKeyboardButton(text="-", callback_data="ignore") for _ in range(date.weekday())]
 
     day_ind = 1
     for day_num in obj.itermonthdays(date.year, date.month):
@@ -76,6 +76,6 @@ async def calendar_buttons(date: datetime, action: str) -> InlineKeyboardBuilder
 
     add_count_btn = 7 - len(keyboard_builder.__dict__["_markup"][-1])
     for _ in range(add_count_btn):
-        keyboard_builder.button(text=" ", callback_data="ignore")
+        keyboard_builder.button(text="-", callback_data="ignore")
 
     return keyboard_builder

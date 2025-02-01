@@ -4,6 +4,7 @@ import datetime
 
 from config_data.config import LOCAL_UTC, REMINDER_TIME
 from database import transactions
+from utils.misc.region_datetime import region_current_datetime
 
 
 async def restarting_services() -> None:
@@ -26,22 +27,7 @@ async def restarting_services() -> None:
         reminder_minute = 30
 
     while True:
-        current_datetime = datetime.datetime.utcnow()
-        region_time = current_datetime
-
-        try:
-            if LOCAL_UTC:
-                if LOCAL_UTC[0] == "+":
-                    region_time = current_datetime.replace(
-                        hour=current_datetime.hour + int(LOCAL_UTC[1])
-                    )
-
-                elif LOCAL_UTC[0] == "-":
-                    region_time = current_datetime.replace(
-                        hour=current_datetime.hour - int(LOCAL_UTC[1])
-                    )
-        except ValueError:
-            pass
+        region_time = await region_current_datetime()
 
         if region_time.hour == reminder_hour and region_time.minute == reminder_minute:
             await transactions.deleting_records_older_7_days()
