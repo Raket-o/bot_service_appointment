@@ -10,7 +10,6 @@ async def reminder(date: datetime) -> None:
     """
     Функция reminder. Напоминания о записи. Запрашивает всех пользователей на сегодня.
     """
-    # res = database.mailing_for_day(date)
     res = await transactions.mailing_for_day(date)
 
     for user in res:
