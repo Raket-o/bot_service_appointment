@@ -38,7 +38,7 @@ async def service_appointment_1(message: types.Message, state: FSMContext):
     beginning_working_day = BEGINNING_WORKING_DAY
 
     if current_hour > BEGINNING_WORKING_DAY and selected_date == region_time.date():
-        beginning_working_day = current_hour
+        beginning_working_day = current_hour + 1
 
     if res:
         working_hours = [

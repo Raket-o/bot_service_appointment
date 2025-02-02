@@ -75,8 +75,9 @@ async def get_date_time_appointment(date: datetime) -> list[Any]:
 
 async def check_date_time_appointment(date: datetime, hour: int) -> list[Any]:
     """Функция check_date_time_appointment. Проверяет занята дата и время записи."""
-    res = await (session.execute(select(RecordDate.hour, UserInfo.telegramm_id).join(UserInfo, UserInfo.telegramm_id == RecordDate.telegram_id)
-           .where(RecordDate.record_date == date, RecordDate.hour == hour)))
+    res = await (session.execute(
+        select(RecordDate.hour, UserInfo.telegramm_id).join(UserInfo, UserInfo.telegramm_id == RecordDate.telegram_id)
+        .where(RecordDate.record_date == date, RecordDate.hour == hour)))
     return res.all()
 
 
@@ -92,7 +93,7 @@ async def set_date_time_appointment(contact, date: datetime, hour: int) -> None:
         user = user.scalar()
         user.telephone = phone_number
     else:
-        full_name = [contact.last_name if contact.last_name else "",contact.first_name if contact.first_name else ""]
+        full_name = [contact.last_name if contact.last_name else "", contact.first_name if contact.first_name else ""]
         full_name = " ".join(full_name)
         await add_user(telegram_id, full_name)
 
@@ -135,7 +136,9 @@ async def view_clients() -> list[Any]:
 
 async def view_record(telegram_id: int) -> list[Any]:
     """Функция view_record. Возвращает все записи пользователя."""
-    res = await session.execute(select(RecordDate.record_date, RecordDate.hour).where(RecordDate.telegram_id == telegram_id).order_by(RecordDate.record_date, RecordDate.hour))
+    res = await session.execute(
+        select(RecordDate.record_date, RecordDate.hour).where(RecordDate.telegram_id == telegram_id).order_by(
+            RecordDate.record_date, RecordDate.hour))
     return res.all()
 
 
@@ -167,7 +170,7 @@ async def search_client(search_text: str) -> list[Any]:
 
 
 async def reserve_day(
-    telegram_id: int, date: datetime, beginning_working_day: int, end_working_day: int
+        telegram_id: int, date: datetime, beginning_working_day: int, end_working_day: int
 ) -> None:
     """Функция reserve_day. Резервирует день."""
     records = (
@@ -185,21 +188,22 @@ async def reserve_day(
 
 async def mailing_for_day(date: datetime) -> list[Any]:
     """Функция mailing_for_day. Возвращает всех пользователя кто записан на день."""
-    res = await session.execute(select(RecordDate.telegram_id).where(RecordDate.record_date == date).group_by(RecordDate.telegram_id))
+    res = await session.execute(
+        select(RecordDate.telegram_id, RecordDate.hour).where(RecordDate.record_date == date).group_by(RecordDate.telegram_id))
     return res.all()
 
 
 async def viewing_recordings_day_db(date: datetime) -> list[Any]:
     """Функция viewing_recordings_day_db. Возвращает все записи на день."""
     res = await (session.execute(select(UserInfo.full_name, UserInfo.telephone, RecordDate.hour).
-           join(UserInfo, UserInfo.telegramm_id==RecordDate.telegram_id).
-           where(RecordDate.record_date == date).order_by(RecordDate.hour)))
+                                 join(UserInfo, UserInfo.telegramm_id == RecordDate.telegram_id).
+                                 where(RecordDate.record_date == date).order_by(RecordDate.hour)))
     return res.all()
 
 
 async def get_info_user(date: datetime, hour: int) -> UserInfo:
     """Функция get_info_user. Возвращает ид пользователя."""
     res = await (session.execute(select(RecordDate.telegram_id).
-           join(UserInfo, UserInfo.telegramm_id==RecordDate.telegram_id).
-           where(RecordDate.record_date == date, RecordDate.hour == hour)))
+                                 join(UserInfo, UserInfo.telegramm_id == RecordDate.telegram_id).
+                                 where(RecordDate.record_date == date, RecordDate.hour == hour)))
     return res.one_or_none()

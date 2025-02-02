@@ -34,6 +34,6 @@ async def restarting_services() -> None:
             await transactions.deletes_old_users()
 
             from utils.misc.reminder import reminder
-            await reminder(region_time)
+            await reminder(region_time.date())
 
-        await asyncio.sleep(60)
+        await asyncio.sleep(6)
