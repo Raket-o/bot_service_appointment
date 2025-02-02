@@ -48,7 +48,7 @@ async def delete_recordings_2(
 
     if "Вернуться" in input_text:
         await state.clear()
-        await start_command(message)
+        await start_command(message, state)
     else:
         context_data = await state.get_data()
         date, hour = context_data.get("date"), context_data.get("hour")
