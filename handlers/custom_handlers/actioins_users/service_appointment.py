@@ -128,7 +128,7 @@ async def service_appointment_3(message: types.Message, state: FSMContext):
     selected_date, selected_hour = context_data.get("selected_date"), context_data.get("selected_hour")
 
     res = await transactions.check_date_time_appointment(selected_date, selected_hour)
-    if not res:
+    if not res and selected_date >= datetime.datetime.now().date():
         await transactions.set_date_time_appointment(contact, selected_date, selected_hour)
 
         sending_text = f"""Новая запись!!!
